@@ -1,17 +1,12 @@
 package com.example.demo.service;
 
-import com.example.demo.entity.GeneratedShiftScheduleEntity;
-
-import java.time.LocalDate;
 import java.util.List;
+import com.example.demo.entity.GeneratedShiftScheduleEntity;
 
 public interface ScheduleService {
 
-    List<GeneratedShiftScheduleEntity> generateForDate(LocalDate date);
+    GeneratedShiftScheduleEntity save(
+            GeneratedShiftScheduleEntity schedule);
 
-    List<GeneratedShiftScheduleEntity> getByDate(LocalDate date);
-
-    List<GeneratedShiftScheduleEntity> getAll();
-
-    void deleteById(Long id);
+    List<GeneratedShiftScheduleEntity> findAll();
 }
