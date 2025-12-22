@@ -1,21 +1,14 @@
-package com.example.employee.entity;
+package com.example.demo.entity;
 
-import jakarta.persistence.*;
 import java.time.LocalTime;
+import jakarta.persistence.*;
 
 @Entity
 @Table(
-    name = "shift_template",
-    uniqueConstraints = {
-        @UniqueConstraint(
-            columnNames = {
-                "department_id",
-                "shift_name",
-                "start_time",
-                "end_time"
-            }
-        )
-    }
+    name = "shift_templates",
+    uniqueConstraints = @UniqueConstraint(
+        columnNames = {"templateName", "department_id"}
+    )
 )
 public class ShiftTemplateEntity {
 
@@ -23,53 +16,33 @@ public class ShiftTemplateEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "department_id", nullable = false)
-    private Long departmentId;
+    private String templateName;
 
-    @Column(name = "shift_name", nullable = false)
-    private String shiftName;
-
-    @Column(name = "start_time", nullable = false)
     private LocalTime startTime;
-
-    @Column(name = "end_time", nullable = false)
     private LocalTime endTime;
 
-    // -------- Getters & Setters --------
+    private String requiredSkills;
 
-    public Long getId() {
-        return id;
-    }
+    @ManyToOne
+    @JoinColumn(name = "department_id")
+    private DepartmentEntity department;
 
-    public Long getDepartmentId() {
-        return departmentId;
-    }
+    // getters & setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public void setDepartmentId(Long departmentId) {
-        this.departmentId = departmentId;
-    }
+    public String getTemplateName() { return templateName; }
+    public void setTemplateName(String templateName) { this.templateName = templateName; }
 
-    public String getShiftName() {
-        return shiftName;
-    }
+    public LocalTime getStartTime() { return startTime; }
+    public void setStartTime(LocalTime startTime) { this.startTime = startTime; }
 
-    public void setShiftName(String shiftName) {
-        this.shiftName = shiftName;
-    }
+    public LocalTime getEndTime() { return endTime; }
+    public void setEndTime(LocalTime endTime) { this.endTime = endTime; }
 
-    public LocalTime getStartTime() {
-        return startTime;
-    }
+    public String getRequiredSkills() { return requiredSkills; }
+    public void setRequiredSkills(String requiredSkills) { this.requiredSkills = requiredSkills; }
 
-    public void setStartTime(LocalTime startTime) {
-        this.startTime = startTime;
-    }
-
-    public LocalTime getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(LocalTime endTime) {
-        this.endTime = endTime;
-    }
+    public DepartmentEntity getDepartment() { return department; }
+    public void setDepartment(DepartmentEntity department) { this.department = department; }
 }

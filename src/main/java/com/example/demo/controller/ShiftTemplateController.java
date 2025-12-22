@@ -1,10 +1,9 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.ShiftTemplate;
-import com.example.demo.service.ShiftTemplateService;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
+import org.springframework.web.bind.annotation.*;
+import com.example.demo.entity.ShiftTemplateEntity;
+import com.example.demo.service.ShiftTemplateService;
 
 @RestController
 @RequestMapping("/shift-templates")
@@ -17,12 +16,12 @@ public class ShiftTemplateController {
     }
 
     @PostMapping
-    public ShiftTemplate create(@RequestBody ShiftTemplate template) {
-        return service.create(template);
+    public ShiftTemplateEntity save(@RequestBody ShiftTemplateEntity shift) {
+        return service.save(shift);
     }
 
-    @GetMapping("/department/{departmentId}")
-    public List<ShiftTemplate> getByDepartment(@PathVariable Long departmentId) {
-        return service.getByDepartment(departmentId);
+    @GetMapping
+    public List<ShiftTemplateEntity> getAll() {
+        return service.findAll();
     }
 }

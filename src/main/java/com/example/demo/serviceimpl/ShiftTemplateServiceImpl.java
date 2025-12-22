@@ -1,12 +1,10 @@
-package com.example.employee.serviceimpl;
+package com.example.demo.serviceimpl;
 
-import com.example.employee.entity.ShiftTemplateEntity;
-import com.example.employee.repository.ShiftTemplateRepository;
-import com.example.employee.service.ShiftTemplateService;
-import org.springframework.stereotype.Service;
-
-import java.time.LocalTime;
 import java.util.List;
+import org.springframework.stereotype.Service;
+import com.example.demo.entity.ShiftTemplateEntity;
+import com.example.demo.repository.ShiftTemplateRepository;
+import com.example.demo.service.ShiftTemplateService;
 
 @Service
 public class ShiftTemplateServiceImpl implements ShiftTemplateService {
@@ -18,32 +16,19 @@ public class ShiftTemplateServiceImpl implements ShiftTemplateService {
     }
 
     @Override
-    public ShiftTemplateEntity create(ShiftTemplateEntity template) {
+    public ShiftTemplateEntity save(ShiftTemplateEntity shift) {
 
-        LocalTime start = template.getStartTime();
-        LocalTime end = template.getEndTime();
-
-        if (start == null || end == null || !start.isBefore(end)) {
-            throw new IllegalArgumentException("Start time must be before end time");
+        if (shift.getEndTime().isBefore(shift.getStartTime())) {
+            throw new IllegalArgumentException(
+                "End time must be after start time"
+            );
         }
 
-        boolean exists =
-                repository.existsByDepartmentIdAndShiftNameAndStartTimeAndEndTime(
-                        template.getDepartmentId(),
-                        template.getShiftName(),
-                        start,
-                        end
-                );
-
-        if (exists) {
-            throw new IllegalArgumentException("Shift template already exists");
-        }
-
-        return repository.save(template);
+        return repository.save(shift);
     }
 
     @Override
-    public List<ShiftTemplateEntity> getByDepartment(Long departmentId) {
-        return repository.findByDepartmentId(departmentId);
+    public List<ShiftTemplateEntity> findAll() {
+        return repository.findAll();
     }
 }

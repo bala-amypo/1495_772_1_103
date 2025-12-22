@@ -1,19 +1,12 @@
 package com.example.demo.repository;
 
-import com.example.demo.model.ShiftTemplate;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import com.example.demo.entity.ShiftTemplateEntity;
 
-import java.time.LocalTime;
-import java.util.List;
+public interface ShiftTemplateRepository
+        extends JpaRepository<ShiftTemplateEntity, Long> {
 
-public interface ShiftTemplateRepository extends JpaRepository<ShiftTemplateEntity, Long> {
-
-    List<ShiftTemplate> findByDepartmentId(Long departmentId);
-
-    boolean existsByDepartmentIdAndShiftNameAndStartTimeAndEndTime(
-            Long departmentId,
-            String shiftName,
-            LocalTime startTime,
-            LocalTime endTime
-    );
+    Optional<ShiftTemplateEntity> findByTemplateNameAndDepartment_Id(
+            String templateName, Long departmentId);
 }
