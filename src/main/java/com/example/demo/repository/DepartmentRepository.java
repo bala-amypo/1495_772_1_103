@@ -1,10 +1,8 @@
-package com.example.employee.repository;
+package com.example.demo.repository;
 
-import com.example.employee.entity.DepartmentEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import com.example.demo.entity.DepartmentEntity;
 
 public interface DepartmentRepository
         extends JpaRepository<DepartmentEntity, Long> {
-
-    boolean existsByName(String name);
 }

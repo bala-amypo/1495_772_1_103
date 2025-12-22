@@ -1,58 +1,24 @@
-package com.example.employee.service;
-
-import com.example.employee.entity.Employee;
-import com.example.employee.repository.EmployeeRepository;
-import org.springframework.stereotype.Service;
+package com.example.demo.service;
 
 import java.util.List;
+import org.springframework.stereotype.Service;
+import com.example.demo.entity.EmployeeEntity;
+import com.example.demo.repository.EmployeeRepository;
 
 @Service
 public class EmployeeService {
 
-    private final EmployeeRepository repo;
+    private final EmployeeRepository repository;
 
-    public EmployeeService(EmployeeRepository repo) {
-        this.repo = repo;
+    public EmployeeService(EmployeeRepository repository) {
+        this.repository = repository;
     }
 
-    
-    public Employee save(Employee employee) {
-
-        if (employee.getMaxWeeklyHours() <= 0) {
-            throw new RuntimeException("Max weekly hours must be greater than 0");
-        }
-
-        if (repo.existsByEmail(employee.getEmail())) {
-            throw new RuntimeException("Email already exists");
-        }
-
-        return repo.save(employee);
+    public EmployeeEntity save(EmployeeEntity emp) {
+        return repository.save(emp);
     }
 
-   
-    public List<Employee> getAll() {
-        return repo.findAll();
-    }
-
-    public Employee getById(Long id) {
-        return repo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Employee not found"));
-    }
-
-   
-    public Employee update(Long id, Employee emp) {
-        Employee existing = getById(id);
-
-        existing.setFullName(emp.getFullName());
-        existing.setSkills(emp.getSkills());
-        existing.setRole(emp.getRole());
-        existing.setMaxWeeklyHours(emp.getMaxWeeklyHours());
-
-        return repo.save(existing);
-    }
-
-   
-    public void delete(Long id) {
-        repo.deleteById(id);
+    public List<EmployeeEntity> findAll() {
+        return repository.findAll();
     }
 }
