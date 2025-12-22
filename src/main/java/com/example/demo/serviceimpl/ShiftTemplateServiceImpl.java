@@ -19,7 +19,7 @@ public class ShiftTemplateServiceImpl implements ShiftTemplateService {
     @Override
     public ShiftTemplate create(ShiftTemplate template) {
 
-        // 1️⃣ Time validation
+        
         LocalTime start = template.getStartTime();
         LocalTime end = template.getEndTime();
 
@@ -27,7 +27,7 @@ public class ShiftTemplateServiceImpl implements ShiftTemplateService {
             throw new IllegalArgumentException("Start time must be before end time");
         }
 
-        // 2️⃣ Uniqueness check
+        
         boolean exists = repository.existsByDepartmentIdAndShiftNameAndStartTimeAndEndTime(
                 template.getDepartmentId(),
                 template.getShiftName(),
