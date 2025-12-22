@@ -1,7 +1,8 @@
-package com.example.demo.service;
+package com.example.employee.serviceimpl;
 
-import com.example.demo.model.ShiftTemplate;
-import com.example.demo.repository.ShiftTemplateRepository;
+import com.example.employee.entity.ShiftTemplateEntity;
+import com.example.employee.repository.ShiftTemplateRepository;
+import com.example.employee.service.ShiftTemplateService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalTime;
@@ -17,9 +18,8 @@ public class ShiftTemplateServiceImpl implements ShiftTemplateService {
     }
 
     @Override
-    public ShiftTemplate create(ShiftTemplate template) {
+    public ShiftTemplateEntity create(ShiftTemplateEntity template) {
 
-        
         LocalTime start = template.getStartTime();
         LocalTime end = template.getEndTime();
 
@@ -27,13 +27,13 @@ public class ShiftTemplateServiceImpl implements ShiftTemplateService {
             throw new IllegalArgumentException("Start time must be before end time");
         }
 
-        
-        boolean exists = repository.existsByDepartmentIdAndShiftNameAndStartTimeAndEndTime(
-                template.getDepartmentId(),
-                template.getShiftName(),
-                start,
-                end
-        );
+        boolean exists =
+                repository.existsByDepartmentIdAndShiftNameAndStartTimeAndEndTime(
+                        template.getDepartmentId(),
+                        template.getShiftName(),
+                        start,
+                        end
+                );
 
         if (exists) {
             throw new IllegalArgumentException("Shift template already exists");
@@ -43,7 +43,7 @@ public class ShiftTemplateServiceImpl implements ShiftTemplateService {
     }
 
     @Override
-    public List<ShiftTemplate> getByDepartment(Long departmentId) {
+    public List<ShiftTemplateEntity> getByDepartment(Long departmentId) {
         return repository.findByDepartmentId(departmentId);
     }
 }
