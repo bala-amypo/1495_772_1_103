@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.time.LocalTime;
 import java.util.List;
 
-public interface ShiftTemplateRepository extends JpaRepository<ShiftTemplate, Long> {
+public interface ShiftTemplateRepository extends JpaRepository<ShiftTemplateEntity, Long> {
 
     List<ShiftTemplate> findByDepartmentId(Long departmentId);
 

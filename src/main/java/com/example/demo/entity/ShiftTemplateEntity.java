@@ -11,7 +11,7 @@ import java.time.LocalTime;
         )
     }
 )
-public class ShiftTemplate {
+public class ShiftTemplateEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
