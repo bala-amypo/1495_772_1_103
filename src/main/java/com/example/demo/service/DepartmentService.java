@@ -15,7 +15,7 @@ public class DepartmentService {
         this.repo = repo;
     }
 
-    // CREATE
+    
     public Department create(Department department) {
 
         if (repo.existsByName(department.getName())) {
@@ -30,18 +30,18 @@ public class DepartmentService {
         return repo.save(department);
     }
 
-    // READ ALL
+   
     public List<Department> getAll() {
         return repo.findAll();
     }
 
-    // READ BY ID
+    
     public Department getById(Long id) {
         return repo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Department not found"));
     }
 
-    // UPDATE
+    
     public Department update(Long id, Department dept) {
 
         Department existing = getById(id);
@@ -52,7 +52,7 @@ public class DepartmentService {
         return repo.save(existing);
     }
 
-    // DELETE
+   
     public void delete(Long id) {
         repo.deleteById(id);
     }

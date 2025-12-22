@@ -8,11 +8,11 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Service
-public class AvailabilityServiceImpl implements AvailabilityService {
+public class EmployeeAvailabilityServiceImpl implements EmployeeAvailabilityService {
 
-    private final AvailabilityRepository repository;
+    private final EmployeeAvailabilityRepository repository;
 
-    public AvailabilityServiceImpl(AvailabilityRepository repository) {
+    public EmployeeAvailabilityServiceImpl(EmployeeAvailabilityRepository repository) {
         this.repository = repository;
     }
 

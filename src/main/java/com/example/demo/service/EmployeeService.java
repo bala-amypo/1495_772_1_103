@@ -15,7 +15,7 @@ public class EmployeeService {
         this.repo = repo;
     }
 
-    // CREATE
+    
     public Employee save(Employee employee) {
 
         if (employee.getMaxWeeklyHours() <= 0) {
@@ -29,7 +29,7 @@ public class EmployeeService {
         return repo.save(employee);
     }
 
-    // READ
+   
     public List<Employee> getAll() {
         return repo.findAll();
     }
@@ -39,7 +39,7 @@ public class EmployeeService {
                 .orElseThrow(() -> new RuntimeException("Employee not found"));
     }
 
-    // UPDATE
+   
     public Employee update(Long id, Employee emp) {
         Employee existing = getById(id);
 
@@ -51,7 +51,7 @@ public class EmployeeService {
         return repo.save(existing);
     }
 
-    // DELETE
+   
     public void delete(Long id) {
         repo.deleteById(id);
     }
