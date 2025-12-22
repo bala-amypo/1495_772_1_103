@@ -23,20 +23,20 @@ public class ScheduleEntity {
 
     private String shiftName;
 
-   
-    public GeneratedShiftSchedule() {
+    // ✅ CORRECT NO-ARG CONSTRUCTOR
+    public ScheduleEntity() {
     }
 
-    
-    public GeneratedShiftSchedule(LocalDate date, Long employeeId,
-                                  Long shiftTemplateId, String shiftName) {
+    // ✅ CORRECT PARAMETERIZED CONSTRUCTOR
+    public ScheduleEntity(LocalDate date, Long employeeId,
+                          Long shiftTemplateId, String shiftName) {
         this.date = date;
         this.employeeId = employeeId;
         this.shiftTemplateId = shiftTemplateId;
         this.shiftName = shiftName;
     }
 
-    
+    // Getters & Setters
 
     public Long getId() {
         return id;

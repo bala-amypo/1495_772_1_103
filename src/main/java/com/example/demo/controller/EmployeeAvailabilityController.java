@@ -13,18 +13,21 @@ public class EmployeeAvailabilityController {
 
     private final AvailabilityService service;
 
-    public AvailabilityController(EmployeeAvailabilityService service) {
+    
+    public EmployeeAvailabilityController(AvailabilityService service) {
         this.service = service;
     }
 
     @PostMapping
-    public EmployeeAvailability create(@RequestBody EmployeeAvailability availability) {
+    public EmployeeAvailability create(
+            @RequestBody EmployeeAvailability availability) {
         return service.create(availability);
     }
 
     @PutMapping("/{id}")
-    public EmployeeAvailability update(@PathVariable Long id,
-                                       @RequestBody EmployeeAvailability availability) {
+    public EmployeeAvailability update(
+            @PathVariable Long id,
+            @RequestBody EmployeeAvailability availability) {
         return service.update(id, availability);
     }
 
@@ -34,7 +37,8 @@ public class EmployeeAvailabilityController {
     }
 
     @GetMapping("/date/{date}")
-    public List<EmployeeAvailability> getByDate(@PathVariable String date) {
+    public List<EmployeeAvailability> getByDate(
+            @PathVariable String date) {
         return service.getByDate(LocalDate.parse(date));
     }
 }
