@@ -1,13 +1,14 @@
-package com.example.employee.entity;
+package com.example.demo.model;
 
 import jakarta.persistence.*;
 import java.time.LocalTime;
 
 @Entity
 @Table(
-    name = "shift_template",
     uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"templateName", "department_id"})
+        @UniqueConstraint(
+            columnNames = {"departmentId", "shiftName", "startTime", "endTime"}
+        )
     }
 )
 public class ShiftTemplate {
@@ -16,37 +17,47 @@ public class ShiftTemplate {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String templateName;
+    private Long departmentId;
 
-    @Column(nullable = false)
+    private String shiftName;
+
     private LocalTime startTime;
 
-    @Column(nullable = false)
     private LocalTime endTime;
 
-    // comma-separated skills
-    private String requiredSkills;
+    public Long getId() {
+        return id;
+    }
 
-    @ManyToOne
-    @JoinColumn(name = "department_id", nullable = false)
-    private Department department;
+    public Long getDepartmentId() {
+        return departmentId;
+    }
 
-    // getters & setters
-    public Long getId() { return id; }
+    public void setDepartmentId(Long departmentId) {
+        this.departmentId = departmentId;
+    }
 
-    public String getTemplateName() { return templateName; }
-    public void setTemplateName(String templateName) { this.templateName = templateName; }
+    public String getShiftName() {
+        return shiftName;
+    }
 
-    public LocalTime getStartTime() { return startTime; }
-    public void setStartTime(LocalTime startTime) { this.startTime = startTime; }
+    public void setShiftName(String shiftName) {
+        this.shiftName = shiftName;
+    }
 
-    public LocalTime getEndTime() { return endTime; }
-    public void setEndTime(LocalTime endTime) { this.endTime = endTime; }
+    public LocalTime getStartTime() {
+        return startTime;
+    }
 
-    public String getRequiredSkills() { return requiredSkills; }
-    public void setRequiredSkills(String requiredSkills) { this.requiredSkills = requiredSkills; }
+    public void setStartTime(LocalTime startTime) {
+        this.startTime = startTime;
+    }
 
-    public Department getDepartment() { return department; }
-    public void setDepartment(Department department) { this.department = department; }
+    public LocalTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(LocalTime endTime) {
+        this.endTime = endTime;
+    }
 }
