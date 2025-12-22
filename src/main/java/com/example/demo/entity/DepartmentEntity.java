@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
         @UniqueConstraint(columnNames = "name")
     }
 )
-public class Department {
+public class DepartmentEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,28 +21,52 @@ public class Department {
 
     private String description;
 
-    // comma-separated skills
+    // Comma-separated skills (e.g., "Java,Spring,SQL")
     private String requiredSkills;
 
+    @Column(updatable = false)
     private LocalDateTime createdAt;
 
     @PrePersist
-    public void createTime() {
+    public void onCreate() {
         this.createdAt = LocalDateTime.now();
     }
 
-    // getters & setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    // -------- Getters & Setters --------
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public Long getId() {
+        return id;
+    }
 
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public String getRequiredSkills() { return requiredSkills; }
-    public void setRequiredSkills(String requiredSkills) { this.requiredSkills = requiredSkills; }
+    public String getName() {
+        return name;
+    }
 
-    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getRequiredSkills() {
+        return requiredSkills;
+    }
+
+    public void setRequiredSkills(String requiredSkills) {
+        this.requiredSkills = requiredSkills;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
 }
