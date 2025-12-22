@@ -1,10 +1,11 @@
-package com.example.demo.model;
+package com.example.demo.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-public class EmployeeAvailability {
+@Table(name = "employee_availability")
+public class EmployeeAvailabilityEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
