@@ -1,29 +1,35 @@
-package com.example.demo.service;
+package com.example.demo.serviceimpl;
 
-import com.example.demo.model.EmployeeAvailability;
-import com.example.demo.repository.AvailabilityRepository;
+import com.example.demo.entity.EmployeeAvailabilityEntity;
+import com.example.demo.repository.EmployeeAvailabilityRepository;
+import com.example.demo.service.EmployeeAvailabilityService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Service
-public class EmployeeAvailabilityServiceImpl implements EmployeeAvailabilityService {
+public class EmployeeAvailabilityServiceImpl
+        implements EmployeeAvailabilityService {
 
     private final EmployeeAvailabilityRepository repository;
 
-    public EmployeeAvailabilityServiceImpl(EmployeeAvailabilityRepository repository) {
+    public EmployeeAvailabilityServiceImpl(
+            EmployeeAvailabilityRepository repository) {
         this.repository = repository;
     }
 
     @Override
-    public EmployeeAvailability create(EmployeeAvailability availability) {
+    public EmployeeAvailabilityEntity save(
+            EmployeeAvailabilityEntity availability) {
         return repository.save(availability);
     }
 
     @Override
-    public EmployeeAvailability update(Long id, EmployeeAvailability availability) {
-        EmployeeAvailability existing = repository.findById(id)
+    public EmployeeAvailabilityEntity update(
+            Long id, EmployeeAvailabilityEntity availability) {
+
+        EmployeeAvailabilityEntity existing = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Availability not found"));
 
         existing.setEmployeeId(availability.getEmployeeId());
@@ -34,12 +40,12 @@ public class EmployeeAvailabilityServiceImpl implements EmployeeAvailabilityServ
     }
 
     @Override
-    public void delete(Long id) {
+    public void deleteById(Long id) {
         repository.deleteById(id);
     }
 
     @Override
-    public List<EmployeeAvailability> getByDate(LocalDate date) {
+    public List<EmployeeAvailabilityEntity> getByDate(LocalDate date) {
         return repository.findByDate(date);
     }
 }
