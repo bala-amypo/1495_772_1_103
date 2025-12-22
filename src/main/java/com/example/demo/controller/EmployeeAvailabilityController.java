@@ -9,11 +9,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/availability")
-public class AvailabilityController {
+public class EmployeeAvailabilityController {
 
     private final AvailabilityService service;
 
-    public AvailabilityController(AvailabilityService service) {
+    public AvailabilityController(EmployeeAvailabilityService service) {
         this.service = service;
     }
 
