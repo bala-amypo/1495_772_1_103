@@ -1,12 +1,12 @@
-package com.example.demo.service;
+package com.example.employee.service;
 
-import com.example.demo.model.ShiftTemplate;
+import com.example.employee.entity.ShiftTemplateEntity;
 
 import java.util.List;
 
 public interface ShiftTemplateService {
 
-    ShiftTemplate create(ShiftTemplate template);
+    ShiftTemplateEntity create(ShiftTemplateEntity template);
 
-    List<ShiftTemplate> getByDepartment(Long departmentId);
+    List<ShiftTemplateEntity> getByDepartment(Long departmentId);
 }

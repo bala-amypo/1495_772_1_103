@@ -1,13 +1,19 @@
-package com.example.demo.model;
+package com.example.employee.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalTime;
 
 @Entity
 @Table(
+    name = "shift_template",
     uniqueConstraints = {
         @UniqueConstraint(
-            columnNames = {"departmentId", "shiftName", "startTime", "endTime"}
+            columnNames = {
+                "department_id",
+                "shift_name",
+                "start_time",
+                "end_time"
+            }
         )
     }
 )
@@ -17,13 +23,19 @@ public class ShiftTemplateEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "department_id", nullable = false)
     private Long departmentId;
 
+    @Column(name = "shift_name", nullable = false)
     private String shiftName;
 
+    @Column(name = "start_time", nullable = false)
     private LocalTime startTime;
 
+    @Column(name = "end_time", nullable = false)
     private LocalTime endTime;
+
+    // -------- Getters & Setters --------
 
     public Long getId() {
         return id;
