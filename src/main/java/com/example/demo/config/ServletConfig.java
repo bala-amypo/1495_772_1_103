@@ -7,11 +7,12 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class ServletConfig {
-    
+
     @Bean
     public ServletRegistrationBean<DemoServlet> demoServlet() {
-        ServletRegistrationBean<DemoServlet> registration = new ServletRegistrationBean<>(new DemoServlet(), "/demo");
-        registration.setLoadOnStartup(1);
-        return registration;
+        ServletRegistrationBean<DemoServlet> bean =
+                new ServletRegistrationBean<>(new DemoServlet(), "/demo");
+        bean.setLoadOnStartup(1);
+        return bean;
     }
 }
