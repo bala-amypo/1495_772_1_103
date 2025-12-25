@@ -53,7 +53,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         existing.setEmail(updated.getEmail());
         existing.setRole(updated.getRole());
         existing.setMaxWeeklyHours(updated.getMaxWeeklyHours());
-        // ⚠️ DO NOT TOUCH skills (getter returns Set, field is String)
+        
 
         return repo.save(existing);
     }
