@@ -1,60 +1,74 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.model.*;
-import com.example.demo.repository.*;
+import com.example.demo.model.Employee;
+import com.example.demo.model.GeneratedShiftSchedule;
+import com.example.demo.model.ShiftTemplate;
+import com.example.demo.repository.AvailabilityRepository;
+import com.example.demo.repository.EmployeeRepository;
+import com.example.demo.repository.GeneratedShiftScheduleRepository;
+import com.example.demo.repository.ShiftTemplateRepository;
 import com.example.demo.service.ScheduleService;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
+@Service
+@Transactional
 public class ScheduleServiceImpl implements ScheduleService {
 
-    private final ShiftTemplateRepository templateRepo;
-    private final AvailabilityRepository availabilityRepo;
-    private final EmployeeRepository employeeRepo;
-    private final GeneratedShiftScheduleRepository scheduleRepo;
-    private final DepartmentRepository departmentRepo;
+    private final ShiftTemplateRepository shiftTemplateRepository;
+    private final AvailabilityRepository availabilityRepository;
+    private final EmployeeRepository employeeRepository;
+    private final GeneratedShiftScheduleRepository generatedShiftScheduleRepository;
 
-    public ScheduleServiceImpl(
-            ShiftTemplateRepository templateRepo,
-            AvailabilityRepository availabilityRepo,
-            EmployeeRepository employeeRepo,
-            GeneratedShiftScheduleRepository scheduleRepo,
-            DepartmentRepository departmentRepo
-    ) {
-        this.templateRepo = templateRepo;
-        this.availabilityRepo = availabilityRepo;
-        this.employeeRepo = employeeRepo;
-        this.scheduleRepo = scheduleRepo;
-        this.departmentRepo = departmentRepo;
+    public ScheduleServiceImpl(ShiftTemplateRepository shiftTemplateRepository,
+                               AvailabilityRepository availabilityRepository,
+                               EmployeeRepository employeeRepository,
+                               GeneratedShiftScheduleRepository generatedShiftScheduleRepository) {
+        this.shiftTemplateRepository = shiftTemplateRepository;
+        this.availabilityRepository = availabilityRepository;
+        this.employeeRepository = employeeRepository;
+        this.generatedShiftScheduleRepository = generatedShiftScheduleRepository;
     }
 
+    @Override
     public List<GeneratedShiftSchedule> generateForDate(LocalDate date) {
-        List<GeneratedShiftSchedule> result = new ArrayList<>();
+        List<ShiftTemplate> templates = shiftTemplateRepository.findAll();
+        List<Employee> employees = employeeRepository.findAll(); // Filter available employees as per availability
 
-        for (Department dept : departmentRepo.findAll()) {
-            List<ShiftTemplate> templates = templateRepo.findByDepartment_Id(dept.getId());
-            List<EmployeeAvailability> availabilities =
-                    availabilityRepo.findByAvailableDateAndAvailable(date, true);
+        List<GeneratedShiftSchedule> schedules = new ArrayList<>();
 
-            for (ShiftTemplate st : templates) {
-                for (EmployeeAvailability av : availabilities) {
-                    Employee e = av.getEmployee();
+        for (ShiftTemplate template : templates) {
+            for (Employee e : employees) {
+                // Basic skill match
+                String templateSkills = template.getRequiredSkills();
+                String employeeSkills = e.getSkills();
+                if (templateSkills != null && employeeSkills != null && employeeSkills.contains(templateSkills)) {
 
-                    if (e.getSkills().contains(st.getRequiredSkills())) {
-                        GeneratedShiftSchedule g = new GeneratedShiftSchedule();
-                        g.setEmployee(e);
-                        g.setShiftTemplate(st);
-                        g.setShiftDate(date);
-                        result.add(scheduleRepo.save(g));
-                    }
+                    GeneratedShiftSchedule g = new GeneratedShiftSchedule();
+                    g.setShiftDate(date);
+                    g.setStartTime(template.getStartTime());
+                    g.setEndTime(template.getEndTime());
+                    g.setShiftTemplate(template); // fixed
+                    g.setEmployee(e);
+                    g.setDepartment(template.getDepartment());
+
+                    generatedShiftScheduleRepository.save(g);
+                    schedules.add(g);
+                    break; // assign first matching employee only
                 }
             }
         }
-        return result;
+
+        return schedules;
     }
 
+    @Override
     public List<GeneratedShiftSchedule> getByDate(LocalDate date) {
-        return scheduleRepo.findByShiftDate(date);
+        return generatedShiftScheduleRepository.findByShiftDate(date);
     }
 }

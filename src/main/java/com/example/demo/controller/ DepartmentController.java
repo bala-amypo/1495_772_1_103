@@ -2,36 +2,39 @@ package com.example.demo.controller;
 
 import com.example.demo.model.Department;
 import com.example.demo.service.DepartmentService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
-@RequestMapping("/departments")
+@RequestMapping("/api/departments")
 public class DepartmentController {
 
-    private final DepartmentService service;
+    private final DepartmentService departmentService;
 
-    public DepartmentController(DepartmentService service) {
-        this.service = service;
+    @Autowired
+    public DepartmentController(DepartmentService departmentService) {
+        this.departmentService = departmentService;
     }
 
     @PostMapping
-    public Department create(@RequestBody Department d) {
-        return service.create(d);
-    }
-
-    @GetMapping("/{id}")
-    public Department get(@PathVariable Long id) {
-        return service.get(id);
+    public Department create(@RequestBody Department department) {
+        return departmentService.create(department);
     }
 
     @GetMapping
     public List<Department> getAll() {
-        return service.getAll();
+        return departmentService.getAll();
+    }
+
+    @GetMapping("/{id}")
+    public Department get(@PathVariable Long id) {
+        return departmentService.get(id);
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
-        service.delete(id);
+        departmentService.delete(id);
     }
 }

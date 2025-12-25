@@ -3,63 +3,76 @@ package com.example.demo.service.impl;
 import com.example.demo.model.Employee;
 import com.example.demo.repository.EmployeeRepository;
 import com.example.demo.service.EmployeeService;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
+@Service
+@Transactional
 public class EmployeeServiceImpl implements EmployeeService {
 
-    private final EmployeeRepository repo;
+    private final EmployeeRepository employeeRepository;
 
-    public EmployeeServiceImpl(EmployeeRepository repo) {
-        this.repo = repo;
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository) {
+        this.employeeRepository = employeeRepository;
     }
 
-    public Employee createEmployee(Employee e) {
-        if (repo.existsByEmail(e.getEmail()))
-            throw new RuntimeException("Employee already exists");
+    @Override
+    public Employee createEmployee(Employee employee) {
+        if (employeeRepository.existsByEmail(employee.getEmail())) {
+            throw new IllegalArgumentException("Employee with email " + employee.getEmail() + " already exists");
+        }
 
-        if (e.getMaxHoursPerWeek() <= 0)
-            throw new RuntimeException("Hours must be greater than zero");
+        if (employee.getMaxWeeklyHours() == null || employee.getMaxWeeklyHours() <= 0) {
+            throw new IllegalArgumentException("Max weekly hours must be greater than 0");
+        }
 
-        if (e.getRole() == null)
-            e.setRole("STAFF");
+        // Set default role if not provided
+        if (employee.getRole() == null) {
+            employee.setRole("STAFF");
+        }
 
-        return repo.save(e);
+        employee.setCreatedAt(LocalDateTime.now());
+
+        // Convert skills Set<String> to comma-separated String if needed
+        // Assuming service receives Set<String> via some DTO
+        // Example: Set<String> skillsSet = ...;
+        // employee.setSkills(String.join(",", skillsSet));
+
+        return employeeRepository.save(employee);
     }
 
+    @Override
     public Employee getEmployee(Long id) {
-        return repo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Employee not found"));
+        return employeeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Employee not found with id " + id));
     }
 
-    public Employee updateEmployee(Long id, Employee e) {
-        Employee old = repo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Employee not found"));
+    @Override
+    public Employee updateEmployee(Long id, Employee employee) {
+        Employee existing = getEmployee(id);
 
-        if (!old.getEmail().equals(e.getEmail()) && repo.existsByEmail(e.getEmail()))
-            throw new RuntimeException("Email exists");
+        existing.setFullName(employee.getFullName());
+        existing.setEmail(employee.getEmail());
+        existing.setRole(employee.getRole() != null ? employee.getRole() : existing.getRole());
+        existing.setMaxWeeklyHours(employee.getMaxWeeklyHours());
+        existing.setSkills(employee.getSkills());
 
-        old.setFullName(e.getFullName());
-        old.setEmail(e.getEmail());
-        old.setRole(e.getRole());
-        old.setSkills(e.getSkills());
-        old.setMaxHoursPerWeek(e.getMaxHoursPerWeek());
-
-        return repo.save(old);
+        return employeeRepository.save(existing);
     }
 
+    @Override
     public void deleteEmployee(Long id) {
-        Employee e = repo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Employee not found"));
-        repo.delete(e);
+        Employee existing = getEmployee(id);
+        employeeRepository.delete(existing);
     }
 
+    @Override
     public List<Employee> getAll() {
-        return repo.findAll();
-    }
-
-    public Employee findByEmail(String email) {
-        return repo.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Employee not found"));
+        return employeeRepository.findAll();
     }
 }
