@@ -5,20 +5,22 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "employee_availability")
+@Table(name = "employee_availability",
+       uniqueConstraints = @UniqueConstraint(columnNames = {"employee_id", "availableDate"}))
 public class EmployeeAvailability {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employee_id", nullable = false)
     private Employee employee;
 
     @NotNull
     private LocalDate availableDate;
 
-    private Boolean available;
+    private Boolean available = true;
 
     public EmployeeAvailability() {}
 
@@ -28,6 +30,7 @@ public class EmployeeAvailability {
         this.available = available;
     }
 
+    // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

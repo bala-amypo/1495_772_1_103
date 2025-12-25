@@ -9,5 +9,4 @@ public interface EmployeeService {
     Employee updateEmployee(Long id, Employee employee);
     void deleteEmployee(Long id);
     List<Employee> getAll();
-    Employee findByEmail(String email);
 }
