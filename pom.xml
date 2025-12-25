@@ -94,7 +94,7 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Mockito Core (THIS IS ENOUGH) -->
+        <!-- Mockito -->
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
@@ -102,7 +102,7 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Spring Test (JUnit excluded) -->
+        <!-- Spring Test (JUnit EXCLUDED) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -122,6 +122,10 @@
     </dependencies>
 
     <build>
+
+        <!-- 🔥 THIS IS THE KEY FIX 🔥 -->
+        <testSourceDirectory>test_saved/java</testSourceDirectory>
+
         <plugins>
 
             <!-- TestNG Surefire -->
