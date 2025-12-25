@@ -5,46 +5,79 @@ import com.example.demo.repository.*;
 import com.example.demo.service.ScheduleService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @Transactional
 public class ScheduleServiceImpl implements ScheduleService {
-
     private final ShiftTemplateRepository shiftTemplateRepository;
-    private final EmployeeRepository employeeRepository;
-    private final GeneratedShiftScheduleRepository generatedShiftScheduleRepository;
+    private final AvailabilityRepository availabilityRepository;
+    private final GeneratedShiftScheduleRepository scheduleRepository;
+    private final DepartmentRepository departmentRepository;
 
     public ScheduleServiceImpl(ShiftTemplateRepository shiftTemplateRepository,
-                               EmployeeRepository employeeRepository,
-                               GeneratedShiftScheduleRepository generatedShiftScheduleRepository) {
+                             AvailabilityRepository availabilityRepository,
+                             EmployeeRepository employeeRepository,
+                             GeneratedShiftScheduleRepository scheduleRepository,
+                             DepartmentRepository departmentRepository) {
         this.shiftTemplateRepository = shiftTemplateRepository;
-        this.employeeRepository = employeeRepository;
-        this.generatedShiftScheduleRepository = generatedShiftScheduleRepository;
+        this.availabilityRepository = availabilityRepository;
+        this.scheduleRepository = scheduleRepository;
+        this.departmentRepository = departmentRepository;
     }
 
     @Override
     public List<GeneratedShiftSchedule> generateForDate(LocalDate date) {
-        List<ShiftTemplate> templates = shiftTemplateRepository.findAll();
-        List<Employee> employees = employeeRepository.findAll();
+        List<Department> departments = departmentRepository.findAll();
+        List<EmployeeAvailability> availableEmployees = availabilityRepository.findByAvailableDateAndAvailable(date, true);
+        List<GeneratedShiftSchedule> schedules = new ArrayList<>();
 
-        // simple example: assign first employee to first template
-        GeneratedShiftSchedule g = new GeneratedShiftSchedule();
-        g.setShiftDate(date);
-        g.setStartTime(templates.get(0).getStartTime());
-        g.setEndTime(templates.get(0).getEndTime());
-        g.setEmployee(employees.get(0));
-        g.setDepartment(templates.get(0).getDepartment());
-        g.setShiftTemplate(templates.get(0)); // make sure setter exists in entity
-        generatedShiftScheduleRepository.save(g);
-
-        return generatedShiftScheduleRepository.findByShiftDate(date);
+        for (Department department : departments) {
+            List<ShiftTemplate> templates = shiftTemplateRepository.findByDepartment_Id(department.getId());
+            
+            for (ShiftTemplate template : templates) {
+                for (EmployeeAvailability availability : availableEmployees) {
+                    Employee employee = availability.getEmployee();
+                    if (hasMatchingSkills(employee.getSkills(), template.getRequiredSkills())) {
+                        GeneratedShiftSchedule schedule = new GeneratedShiftSchedule(
+                                date,
+                                template.getStartTime(),
+                                template.getEndTime(),
+                                template,
+                                department,
+                                employee
+                        );
+                        schedules.add(scheduleRepository.save(schedule));
+                        break; // Assign first qualified employee
+                    }
+                }
+            }
+        }
+        return schedules;
     }
 
     @Override
     public List<GeneratedShiftSchedule> getByDate(LocalDate date) {
-        return generatedShiftScheduleRepository.findByShiftDate(date);
+        return scheduleRepository.findByShiftDate(date);
+    }
+
+    private boolean hasMatchingSkills(String employeeSkills, String requiredSkills) {
+        if (employeeSkills == null || requiredSkills == null) return false;
+        String[] empSkills = employeeSkills.toLowerCase().split(",");
+        String[] reqSkills = requiredSkills.toLowerCase().split(",");
+        
+        for (String reqSkill : reqSkills) {
+            boolean found = false;
+            for (String empSkill : empSkills) {
+                if (empSkill.trim().equals(reqSkill.trim())) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) return false;
+        }
+        return true;
     }
 }
