@@ -1,11 +1,7 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.model.Employee;
-import com.example.demo.model.GeneratedShiftSchedule;
-import com.example.demo.model.ShiftTemplate;
-import com.example.demo.repository.EmployeeRepository;
-import com.example.demo.repository.GeneratedShiftScheduleRepository;
-import com.example.demo.repository.ShiftTemplateRepository;
+import com.example.demo.model.*;
+import com.example.demo.repository.*;
 import com.example.demo.service.ScheduleService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,11 +17,9 @@ public class ScheduleServiceImpl implements ScheduleService {
     private final EmployeeRepository employeeRepository;
     private final GeneratedShiftScheduleRepository generatedShiftScheduleRepository;
 
-    public ScheduleServiceImpl(
-            ShiftTemplateRepository shiftTemplateRepository,
-            EmployeeRepository employeeRepository,
-            GeneratedShiftScheduleRepository generatedShiftScheduleRepository
-    ) {
+    public ScheduleServiceImpl(ShiftTemplateRepository shiftTemplateRepository,
+                               EmployeeRepository employeeRepository,
+                               GeneratedShiftScheduleRepository generatedShiftScheduleRepository) {
         this.shiftTemplateRepository = shiftTemplateRepository;
         this.employeeRepository = employeeRepository;
         this.generatedShiftScheduleRepository = generatedShiftScheduleRepository;
@@ -33,34 +27,18 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Override
     public List<GeneratedShiftSchedule> generateForDate(LocalDate date) {
-
         List<ShiftTemplate> templates = shiftTemplateRepository.findAll();
         List<Employee> employees = employeeRepository.findAll();
 
-        if (templates.isEmpty()) {
-            throw new IllegalStateException("No shift templates found");
-        }
-
-        if (employees.isEmpty()) {
-            throw new IllegalStateException("No employees found");
-        }
-
-        ShiftTemplate template = templates.get(0);
-        Employee employee = employees.get(0);
-
-        if (template.getDepartment() == null) {
-            throw new IllegalStateException("Shift template has no department");
-        }
-
-        GeneratedShiftSchedule schedule = new GeneratedShiftSchedule();
-        schedule.setShiftDate(date);
-        schedule.setStartTime(template.getStartTime());
-        schedule.setEndTime(template.getEndTime());
-        schedule.setEmployee(employee);
-        schedule.setDepartment(template.getDepartment());
-        schedule.setShiftTemplate(template);
-
-        generatedShiftScheduleRepository.save(schedule);
+        // simple example: assign first employee to first template
+        GeneratedShiftSchedule g = new GeneratedShiftSchedule();
+        g.setShiftDate(date);
+        g.setStartTime(templates.get(0).getStartTime());
+        g.setEndTime(templates.get(0).getEndTime());
+        g.setEmployee(employees.get(0));
+        g.setDepartment(templates.get(0).getDepartment());
+        g.setShiftTemplate(templates.get(0)); // make sure setter exists in entity
+        generatedShiftScheduleRepository.save(g);
 
         return generatedShiftScheduleRepository.findByShiftDate(date);
     }
