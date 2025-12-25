@@ -1,19 +1,23 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Entity
+@Table(name = "employee_availability")
 public class EmployeeAvailability {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "employee_id", nullable = false)
     private Employee employee;
 
+    @NotNull
     private LocalDate availableDate;
+
     private Boolean available;
 
     public EmployeeAvailability() {}

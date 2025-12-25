@@ -5,38 +5,44 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Entity
+@Table(name = "generated_shift_schedules")
 public class GeneratedShiftSchedule {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    private Employee employee;
+    private LocalDate shiftDate;
+
+    private LocalTime startTime;
+
+    private LocalTime endTime;
 
     @ManyToOne
+    @JoinColumn(name = "shift_template_id", nullable = false)
+    private ShiftTemplate shiftTemplate;
+
+    @ManyToOne
+    @JoinColumn(name = "department_id", nullable = false)
     private Department department;
 
     @ManyToOne
-    private ShiftTemplate shiftTemplate;
-
-    private LocalDate shiftDate;
-    private LocalTime startTime;
-    private LocalTime endTime;
+    @JoinColumn(name = "employee_id", nullable = false)
+    private Employee employee;
 
     public GeneratedShiftSchedule() {}
 
+    public GeneratedShiftSchedule(LocalDate shiftDate, LocalTime startTime, LocalTime endTime, 
+                                ShiftTemplate shiftTemplate, Department department, Employee employee) {
+        this.shiftDate = shiftDate;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.shiftTemplate = shiftTemplate;
+        this.department = department;
+        this.employee = employee;
+    }
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
-
-    public Employee getEmployee() { return employee; }
-    public void setEmployee(Employee employee) { this.employee = employee; }
-
-    public Department getDepartment() { return department; }
-    public void setDepartment(Department department) { this.department = department; }
-
-    public ShiftTemplate getShiftTemplate() { return shiftTemplate; }
-    public void setShiftTemplate(ShiftTemplate shiftTemplate) { this.shiftTemplate = shiftTemplate; }
 
     public LocalDate getShiftDate() { return shiftDate; }
     public void setShiftDate(LocalDate shiftDate) { this.shiftDate = shiftDate; }
@@ -46,4 +52,13 @@ public class GeneratedShiftSchedule {
 
     public LocalTime getEndTime() { return endTime; }
     public void setEndTime(LocalTime endTime) { this.endTime = endTime; }
+
+    public ShiftTemplate getShiftTemplate() { return shiftTemplate; }
+    public void setShiftTemplate(ShiftTemplate shiftTemplate) { this.shiftTemplate = shiftTemplate; }
+
+    public Department getDepartment() { return department; }
+    public void setDepartment(Department department) { this.department = department; }
+
+    public Employee getEmployee() { return employee; }
+    public void setEmployee(Employee employee) { this.employee = employee; }
 }
