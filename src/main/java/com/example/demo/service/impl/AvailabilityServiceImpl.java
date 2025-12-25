@@ -4,11 +4,13 @@ import com.example.demo.model.EmployeeAvailability;
 import com.example.demo.repository.AvailabilityRepository;
 import com.example.demo.repository.EmployeeRepository;
 import com.example.demo.service.AvailabilityService;
-import jakarta.transaction.Transactional;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
 
+@Service
 @Transactional
 public class AvailabilityServiceImpl implements AvailabilityService {
 
@@ -23,12 +25,13 @@ public class AvailabilityServiceImpl implements AvailabilityService {
 
     @Override
     public EmployeeAvailability create(EmployeeAvailability availability) {
-        repo.findByEmployee_IdAndAvailableDate(
-                availability.getEmployee().getId(),
-                availability.getAvailableDate()
-        ).ifPresent(a -> {
-            throw new IllegalArgumentException("Availability exists");
-        });
+
+        Long empId = availability.getEmployee().getId();
+        LocalDate date = availability.getAvailableDate();
+
+        if (repo.findByEmployee_IdAndAvailableDate(empId, date).isPresent()) {
+            throw new IllegalArgumentException("exists");
+        }
 
         return repo.save(availability);
     }
@@ -36,18 +39,16 @@ public class AvailabilityServiceImpl implements AvailabilityService {
     @Override
     public EmployeeAvailability update(Long id, EmployeeAvailability updated) {
         EmployeeAvailability existing = repo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Availability not found"));
+                .orElseThrow(() -> new RuntimeException("not found"));
 
         existing.setAvailable(updated.getAvailable());
-        existing.setAvailableDate(updated.getAvailableDate());
-
         return repo.save(existing);
     }
 
     @Override
     public void delete(Long id) {
         EmployeeAvailability av = repo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Availability not found"));
+                .orElseThrow(() -> new RuntimeException("not found"));
         repo.delete(av);
     }
 

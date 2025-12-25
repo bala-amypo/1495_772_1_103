@@ -3,10 +3,13 @@ package com.example.demo.service.impl;
 import com.example.demo.model.Department;
 import com.example.demo.repository.DepartmentRepository;
 import com.example.demo.service.DepartmentService;
-import jakarta.transaction.Transactional;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
+@Service
 @Transactional
 public class DepartmentServiceImpl implements DepartmentService {
 
@@ -19,21 +22,22 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public Department create(Department department) {
         if (repo.existsByName(department.getName())) {
-            throw new IllegalArgumentException("Department exists");
+            throw new IllegalArgumentException("exists");
         }
+        department.setCreatedAt(LocalDateTime.now());
         return repo.save(department);
     }
 
     @Override
     public Department get(Long id) {
         return repo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Department not found"));
+                .orElseThrow(() -> new RuntimeException("not found"));
     }
 
     @Override
     public void delete(Long id) {
         Department d = repo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Department not found"));
+                .orElseThrow(() -> new RuntimeException("not found"));
         repo.delete(d);
     }
 

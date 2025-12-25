@@ -1,14 +1,15 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.model.Department;
 import com.example.demo.model.ShiftTemplate;
 import com.example.demo.repository.DepartmentRepository;
 import com.example.demo.repository.ShiftTemplateRepository;
 import com.example.demo.service.ShiftTemplateService;
-import jakarta.transaction.Transactional;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Service
 @Transactional
 public class ShiftTemplateServiceImpl implements ShiftTemplateService {
 
@@ -16,25 +17,26 @@ public class ShiftTemplateServiceImpl implements ShiftTemplateService {
     private final DepartmentRepository departmentRepo;
 
     public ShiftTemplateServiceImpl(ShiftTemplateRepository repo,
-                                    DepartmentRepository departmentRepo) {
+                                   DepartmentRepository departmentRepo) {
         this.repo = repo;
         this.departmentRepo = departmentRepo;
     }
 
     @Override
     public ShiftTemplate create(ShiftTemplate template) {
+
         if (!template.getEndTime().isAfter(template.getStartTime())) {
-            throw new IllegalArgumentException("end must be after start");
+            throw new IllegalArgumentException("after");
         }
 
-        Department dept = departmentRepo.findById(template.getDepartment().getId())
-                .orElseThrow(() -> new RuntimeException("Department not found"));
+        Long deptId = template.getDepartment().getId();
+        departmentRepo.findById(deptId)
+                .orElseThrow(() -> new RuntimeException("not found"));
 
-        repo.findByTemplateNameAndDepartment_Id(
-                template.getTemplateName(), dept.getId()
-        ).ifPresent(t -> {
-            throw new IllegalArgumentException("Template must be unique");
-        });
+        if (repo.findByTemplateNameAndDepartment_Id(
+                template.getTemplateName(), deptId).isPresent()) {
+            throw new IllegalArgumentException("unique");
+        }
 
         return repo.save(template);
     }
