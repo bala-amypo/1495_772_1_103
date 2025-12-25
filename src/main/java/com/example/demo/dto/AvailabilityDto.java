@@ -1,49 +1,26 @@
 package com.example.demo.dto;
 
-import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class AvailabilityDTO {
 
-    @NotNull
     private Long employeeId;
+    private LocalDate date;
+    private LocalTime startTime;
+    private LocalTime endTime;
 
-    @NotNull
-    private LocalDate availableDate;
+    public AvailabilityDTO() {}
 
-    @NotNull
-    private Boolean available;
+    public Long getEmployeeId() { return employeeId; }
+    public void setEmployeeId(Long employeeId) { this.employeeId = employeeId; }
 
-    public AvailabilityDTO() {
-    }
+    public LocalDate getDate() { return date; }
+    public void setDate(LocalDate date) { this.date = date; }
 
-    public AvailabilityDTO(Long employeeId, LocalDate availableDate, Boolean available) {
-        this.employeeId = employeeId;
-        this.availableDate = availableDate;
-        this.available = available;
-    }
+    public LocalTime getStartTime() { return startTime; }
+    public void setStartTime(LocalTime startTime) { this.startTime = startTime; }
 
-    public Long getEmployeeId() {
-        return employeeId;
-    }
-
-    public void setEmployeeId(Long employeeId) {
-        this.employeeId = employeeId;
-    }
-
-    public LocalDate getAvailableDate() {
-        return availableDate;
-    }
-
-    public void setAvailableDate(LocalDate availableDate) {
-        this.availableDate = availableDate;
-    }
-
-    public Boolean getAvailable() {
-        return available;
-    }
-
-    public void setAvailable(Boolean available) {
-        this.available = available;
-    }
+    public LocalTime getEndTime() { return endTime; }
+    public void setEndTime(LocalTime endTime) { this.endTime = endTime; }
 }

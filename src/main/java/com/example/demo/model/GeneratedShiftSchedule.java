@@ -17,6 +17,9 @@ public class GeneratedShiftSchedule {
     @ManyToOne
     private Department department;
 
+    @ManyToOne
+    private ShiftTemplate shiftTemplate;
+
     private LocalDate shiftDate;
     private LocalTime startTime;
     private LocalTime endTime;
@@ -31,6 +34,9 @@ public class GeneratedShiftSchedule {
 
     public Department getDepartment() { return department; }
     public void setDepartment(Department department) { this.department = department; }
+
+    public ShiftTemplate getShiftTemplate() { return shiftTemplate; }
+    public void setShiftTemplate(ShiftTemplate shiftTemplate) { this.shiftTemplate = shiftTemplate; }
 
     public LocalDate getShiftDate() { return shiftDate; }
     public void setShiftDate(LocalDate shiftDate) { this.shiftDate = shiftDate; }

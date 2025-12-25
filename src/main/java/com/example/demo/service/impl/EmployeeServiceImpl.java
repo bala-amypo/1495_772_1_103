@@ -3,41 +3,34 @@ package com.example.demo.service.impl;
 import com.example.demo.model.Employee;
 import com.example.demo.repository.EmployeeRepository;
 import com.example.demo.service.EmployeeService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.List;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
-    private final EmployeeRepository employeeRepository;
+    @Autowired
+    private EmployeeRepository employeeRepository;
 
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository) {
-        this.employeeRepository = employeeRepository;
+    @Override
+    public List<Employee> getAll() {
+        return employeeRepository.findAll();
     }
 
     @Override
     public Employee findByEmail(String email) {
-        Optional<Employee> emp = employeeRepository.findByEmail(email);
-        return emp.orElse(null);
+        return employeeRepository.findByEmail(email).orElse(null);
     }
 
     @Override
-    public Employee createEmployee(Employee employee) {
-        if (employee.getMaxWeeklyHours() == 0) {
-            employee.setMaxWeeklyHours(40); // default max hours
-        }
-        employee.setCreatedAt(java.time.LocalDateTime.now());
+    public Employee save(Employee employee) {
         return employeeRepository.save(employee);
     }
 
     @Override
-    public void updateEmployee(Employee employee) {
-        employeeRepository.save(employee);
-    }
-
-    @Override
-    public Employee getEmployeeById(Long id) {
-        return employeeRepository.findById(id).orElse(null);
+    public void delete(Long id) {
+        employeeRepository.deleteById(id);
     }
 }
