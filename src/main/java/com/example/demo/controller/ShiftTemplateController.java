@@ -2,32 +2,31 @@ package com.example.demo.controller;
 
 import com.example.demo.model.ShiftTemplate;
 import com.example.demo.service.ShiftTemplateService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
-@RequestMapping("/shift-templates")
+@RequestMapping("/api/templates")
 public class ShiftTemplateController {
+    private final ShiftTemplateService shiftTemplateService;
 
-    private final ShiftTemplateService service;
-
-    public ShiftTemplateController(ShiftTemplateService service) {
-        this.service = service;
+    public ShiftTemplateController(ShiftTemplateService shiftTemplateService) {
+        this.shiftTemplateService = shiftTemplateService;
     }
 
-    @PostMapping
-    public ShiftTemplate create(@RequestBody ShiftTemplate st) {
-        return service.create(st);
+    @PostMapping("/department/{departmentId}")
+    public ResponseEntity<ShiftTemplate> create(@PathVariable Long departmentId, @RequestBody ShiftTemplate template) {
+        return ResponseEntity.ok(shiftTemplateService.create(template));
     }
 
-    @GetMapping("/department/{id}")
-    public List<ShiftTemplate> getByDepartment(@PathVariable Long id) {
-        return service.getByDepartment(id);
+    @GetMapping("/department/{departmentId}")
+    public ResponseEntity<List<ShiftTemplate>> getByDepartment(@PathVariable Long departmentId) {
+        return ResponseEntity.ok(shiftTemplateService.getByDepartment(departmentId));
     }
 
     @GetMapping
-    public List<ShiftTemplate> getAll() {
-        return service.getAll();
+    public ResponseEntity<List<ShiftTemplate>> list() {
+        return ResponseEntity.ok(shiftTemplateService.getAll());
     }
 }
