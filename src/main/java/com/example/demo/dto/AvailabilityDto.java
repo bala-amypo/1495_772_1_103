@@ -5,13 +5,13 @@ import java.time.LocalDate;
 
 public class AvailabilityDTO {
 
-    @NotNull(message = "Employee ID is required")
+    @NotNull
     private Long employeeId;
 
-    @NotNull(message = "Available date is required")
+    @NotNull
     private LocalDate availableDate;
 
-    @NotNull(message = "Availability status is required")
+    @NotNull
     private Boolean available;
 
     public AvailabilityDTO() {
@@ -23,7 +23,6 @@ public class AvailabilityDTO {
         this.available = available;
     }
 
-    // Getters and Setters
     public Long getEmployeeId() {
         return employeeId;
     }

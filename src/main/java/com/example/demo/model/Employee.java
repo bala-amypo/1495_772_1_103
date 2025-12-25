@@ -13,7 +13,10 @@ public class Employee {
     private String fullName;
     private String email;
     private String role;
-    private String skills;
+
+    @Column(length = 1000)
+    private String skills; // stored as comma-separated string
+
     private int maxWeeklyHours;
 
     public Employee() {}
@@ -24,11 +27,6 @@ public class Employee {
         this.role = role;
         this.skills = skills;
         this.maxWeeklyHours = maxWeeklyHours;
-    }
-
-    public Set<String> getSkills() {
-        if (skills == null || skills.isBlank()) return Set.of();
-        return new HashSet<>(Arrays.asList(skills.split(",")));
     }
 
     public Long getId() { return id; }
@@ -45,6 +43,14 @@ public class Employee {
 
     public String getSkillsRaw() { return skills; }
     public void setSkills(String skills) { this.skills = skills; }
+
+    /**
+     * Returns skills as a Set<String>
+     */
+    public Set<String> getSkillsSet() {
+        if (skills == null || skills.isBlank()) return Set.of();
+        return new HashSet<>(Arrays.asList(skills.split(",")));
+    }
 
     public int getMaxWeeklyHours() { return maxWeeklyHours; }
     public void setMaxWeeklyHours(int maxWeeklyHours) { this.maxWeeklyHours = maxWeeklyHours; }

@@ -23,9 +23,6 @@ public class JwtUtil {
         this.expirationMs = expirationMs;
     }
 
-    /**
-     * Generates JWT token for authenticated user
-     */
     public String generateToken(User user) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("userId", user.getId());
@@ -41,33 +38,21 @@ public class JwtUtil {
                 .compact();
     }
 
-    /**
-     * Validates JWT token
-     */
     public boolean validateToken(String token) {
         try {
-            parseClaims(token);
+            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
         } catch (JwtException | IllegalArgumentException e) {
             return false;
         }
     }
 
-    /**
-     * Extracts email (subject) from JWT token
-     */
     public String getEmailFromToken(String token) {
-        return parseClaims(token).getSubject();
-    }
-
-    /**
-     * Parses JWT token and returns Claims
-     */
-    private Claims parseClaims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token)
-                .getBody();
+                .getBody()
+                .getSubject();
     }
 }
