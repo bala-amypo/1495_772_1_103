@@ -1,19 +1,13 @@
 package com.example.demo.service;
 
 import com.example.demo.model.Employee;
-
 import java.util.List;
-import java.util.Optional;
 
 public interface EmployeeService {
-
-    List<Employee> getAll();
-
-    Optional<Employee> findByEmail(String email);
-
-    Employee save(Employee employee);
-
-    Optional<Employee> findById(Long id);
-
+    Employee createEmployee(Employee employee);
+    Employee getEmployee(Long id);
+    Employee updateEmployee(Long id, Employee employee);
     void deleteEmployee(Long id);
+    List<Employee> getAll();
+    Employee findByEmail(String email);
 }

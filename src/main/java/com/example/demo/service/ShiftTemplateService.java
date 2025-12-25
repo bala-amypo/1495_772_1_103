@@ -4,10 +4,7 @@ import com.example.demo.model.ShiftTemplate;
 import java.util.List;
 
 public interface ShiftTemplateService {
-
-    ShiftTemplate create(ShiftTemplate st);
-
+    ShiftTemplate create(ShiftTemplate template);
     List<ShiftTemplate> getByDepartment(Long departmentId);
-
     List<ShiftTemplate> getAll();
 }
