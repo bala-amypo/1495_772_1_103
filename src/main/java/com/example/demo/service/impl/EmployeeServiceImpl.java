@@ -4,13 +4,10 @@ import com.example.demo.model.Employee;
 import com.example.demo.repository.EmployeeRepository;
 import com.example.demo.service.EmployeeService;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Optional;
 
 @Service
-@Transactional
 public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
@@ -20,48 +17,27 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    public Employee findByEmail(String email) {
+        Optional<Employee> emp = employeeRepository.findByEmail(email);
+        return emp.orElse(null);
+    }
+
+    @Override
     public Employee createEmployee(Employee employee) {
-        if (employeeRepository.existsByEmail(employee.getEmail())) {
-            throw new IllegalArgumentException("Employee email already exists");
+        if (employee.getMaxWeeklyHours() == 0) {
+            employee.setMaxWeeklyHours(40); // default max hours
         }
-
-        if (employee.getMaxWeeklyHours() == null || employee.getMaxWeeklyHours() <= 0) {
-            throw new IllegalArgumentException("Max weekly hours must be > 0");
-        }
-
-        if (employee.getRole() == null) {
-            employee.setRole("STAFF");
-        }
-
-        employee.setCreatedAt(LocalDateTime.now());
+        employee.setCreatedAt(java.time.LocalDateTime.now());
         return employeeRepository.save(employee);
     }
 
     @Override
-    public Employee getEmployee(Long id) {
-        return employeeRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Employee not found"));
+    public void updateEmployee(Employee employee) {
+        employeeRepository.save(employee);
     }
 
     @Override
-    public Employee update(Long id, Employee employee) {
-        Employee e = getEmployee(id);
-        e.setFullName(employee.getFullName());
-        e.setEmail(employee.getEmail());
-        e.setSkills(String.join(",", employee.getSkills())); // store as comma-separated
-        e.setMaxWeeklyHours(employee.getMaxWeeklyHours());
-        e.setRole(employee.getRole());
-        return employeeRepository.save(e);
-    }
-
-    @Override
-    public void deleteEmployee(Long id) {
-        Employee e = getEmployee(id);
-        employeeRepository.delete(e);
-    }
-
-    @Override
-    public List<Employee> getAll() {
-        return employeeRepository.findAll();
+    public Employee getEmployeeById(Long id) {
+        return employeeRepository.findById(id).orElse(null);
     }
 }
