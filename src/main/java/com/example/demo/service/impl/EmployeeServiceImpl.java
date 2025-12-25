@@ -6,7 +6,6 @@ import com.example.demo.service.EmployeeService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -30,7 +29,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         if (employee.getRole() == null) {
             employee.setRole("STAFF");
         }
-        employee.setCreatedAt(LocalDateTime.now());
         return repo.save(employee);
     }
 
@@ -54,8 +52,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         existing.setFullName(updated.getFullName());
         existing.setEmail(updated.getEmail());
         existing.setRole(updated.getRole());
-        existing.setSkills(updated.getSkills());
         existing.setMaxWeeklyHours(updated.getMaxWeeklyHours());
+        // ⚠️ DO NOT TOUCH skills (getter returns Set, field is String)
 
         return repo.save(existing);
     }

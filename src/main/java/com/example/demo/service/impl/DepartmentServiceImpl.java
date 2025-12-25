@@ -6,7 +6,6 @@ import com.example.demo.service.DepartmentService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -24,7 +23,6 @@ public class DepartmentServiceImpl implements DepartmentService {
         if (repo.existsByName(department.getName())) {
             throw new IllegalArgumentException("exists");
         }
-        department.setCreatedAt(LocalDateTime.now());
         return repo.save(department);
     }
 
