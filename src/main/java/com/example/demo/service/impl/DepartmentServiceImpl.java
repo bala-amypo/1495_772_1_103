@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service  
+@Service
 public class DepartmentServiceImpl implements DepartmentService {
 
     private final DepartmentRepository repo;
@@ -25,12 +25,9 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public Department update(Long id, Department d) {
-        Department old = repo.findById(id)
+    public Department get(Long id) {   // ✅ EXACT MATCH
+        return repo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Department not found"));
-
-        old.setName(d.getName());
-        return repo.save(old);
     }
 
     @Override
