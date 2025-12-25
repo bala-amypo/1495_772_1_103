@@ -1,26 +1,34 @@
 package com.example.demo.dto;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
 public class AvailabilityDTO {
 
     private Long employeeId;
-    private LocalDate date;
-    private LocalTime startTime;
-    private LocalTime endTime;
+    private LocalDateTime availableFrom;
+    private LocalDateTime availableTo;
 
-    public AvailabilityDTO() {}
+    public Long getEmployeeId() {
+        return employeeId;
+    }
 
-    public Long getEmployeeId() { return employeeId; }
-    public void setEmployeeId(Long employeeId) { this.employeeId = employeeId; }
+    public void setEmployeeId(Long employeeId) {
+        this.employeeId = employeeId;
+    }
 
-    public LocalDate getDate() { return date; }
-    public void setDate(LocalDate date) { this.date = date; }
+    public LocalDateTime getAvailableFrom() {
+        return availableFrom;
+    }
 
-    public LocalTime getStartTime() { return startTime; }
-    public void setStartTime(LocalTime startTime) { this.startTime = startTime; }
+    public void setAvailableFrom(LocalDateTime availableFrom) {
+        this.availableFrom = availableFrom;
+    }
 
-    public LocalTime getEndTime() { return endTime; }
-    public void setEndTime(LocalTime endTime) { this.endTime = endTime; }
+    public LocalDateTime getAvailableTo() {
+        return availableTo;
+    }
+
+    public void setAvailableTo(LocalDateTime availableTo) {
+        this.availableTo = availableTo;
+    }
 }

@@ -3,34 +3,42 @@ package com.example.demo.service.impl;
 import com.example.demo.model.Employee;
 import com.example.demo.repository.EmployeeRepository;
 import com.example.demo.service.EmployeeService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
-    @Autowired
-    private EmployeeRepository employeeRepository;
+    private final EmployeeRepository repository;
 
-    @Override
-    public List<Employee> getAll() {
-        return employeeRepository.findAll();
+    public EmployeeServiceImpl(EmployeeRepository repository) {
+        this.repository = repository;
     }
 
     @Override
-    public Employee findByEmail(String email) {
-        return employeeRepository.findByEmail(email).orElse(null);
+    public List<Employee> getAll() {
+        return repository.findAll();
+    }
+
+    @Override
+    public Optional<Employee> findByEmail(String email) {
+        return repository.findByEmail(email);
+    }
+
+    @Override
+    public Optional<Employee> findById(Long id) {
+        return repository.findById(id);
     }
 
     @Override
     public Employee save(Employee employee) {
-        return employeeRepository.save(employee);
+        return repository.save(employee);
     }
 
     @Override
     public void deleteEmployee(Long id) {
-        employeeRepository.deleteById(id);
+        repository.deleteById(id);
     }
 }
