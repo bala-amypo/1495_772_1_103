@@ -1,20 +1,21 @@
-package com.example.demo.service.impl;
-
-import com.example.demo.model.EmployeeAvailability;
-import com.example.demo.repository.AvailabilityRepository;
-import com.example.demo.service.AvailabilityService;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import java.time.LocalDate;
-import java.util.List;
-
 @Service
 @Transactional
 public class AvailabilityServiceImpl implements AvailabilityService {
-    private final AvailabilityRepository availabilityRepository;
 
+    private final AvailabilityRepository availabilityRepository;
+    private final EmployeeRepository employeeRepository; // add this
+
+    // Existing constructor (keep)
     public AvailabilityServiceImpl(AvailabilityRepository availabilityRepository) {
         this.availabilityRepository = availabilityRepository;
+        this.employeeRepository = null;
+    }
+
+    // **Constructor required by test**
+    public AvailabilityServiceImpl(AvailabilityRepository availabilityRepository,
+                                   EmployeeRepository employeeRepository) {
+        this.availabilityRepository = availabilityRepository;
+        this.employeeRepository = employeeRepository;
     }
 
     @Override
@@ -42,9 +43,7 @@ public class AvailabilityServiceImpl implements AvailabilityService {
         if (id != null) {
             EmployeeAvailability availability = availabilityRepository.findById(id)
                     .orElseThrow(() -> new RuntimeException("Availability record not found"));
-            if (availability != null) {
-                availabilityRepository.delete(availability);
-            }
+            availabilityRepository.delete(availability);
         }
     }
 
