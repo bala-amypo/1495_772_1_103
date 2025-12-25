@@ -22,10 +22,10 @@ public class Department {
 
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "department", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "department", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<ShiftTemplate> shiftTemplates;
 
-    @OneToMany(mappedBy = "department", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "department", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<GeneratedShiftSchedule> shiftSchedules;
 
     public Department() {}
@@ -34,9 +34,14 @@ public class Department {
         this.name = name;
         this.description = description;
         this.requiredSkills = requiredSkills;
+    }
+
+    @PrePersist
+    protected void onCreate() {
         this.createdAt = LocalDateTime.now();
     }
 
+    // Getters and setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -50,7 +55,6 @@ public class Department {
     public void setRequiredSkills(String requiredSkills) { this.requiredSkills = requiredSkills; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 
     public List<ShiftTemplate> getShiftTemplates() { return shiftTemplates; }
     public void setShiftTemplates(List<ShiftTemplate> shiftTemplates) { this.shiftTemplates = shiftTemplates; }
