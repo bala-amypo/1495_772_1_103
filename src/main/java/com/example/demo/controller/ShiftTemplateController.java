@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.model.ShiftTemplate;
 import com.example.demo.service.ShiftTemplateService;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -20,13 +21,13 @@ public class ShiftTemplateController {
         return service.create(st);
     }
 
-    @GetMapping
-    public List<ShiftTemplate> getAll() {
-        return service.getAll();
-    }
-
     @GetMapping("/department/{id}")
     public List<ShiftTemplate> getByDepartment(@PathVariable Long id) {
         return service.getByDepartment(id);
+    }
+
+    @GetMapping
+    public List<ShiftTemplate> getAll() {
+        return service.getAll();
     }
 }
