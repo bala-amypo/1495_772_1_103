@@ -1,50 +1,44 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.model.*;
-import com.example.demo.repository.*;
-import com.example.demo.service.ScheduleService;
+import com.example.demo.model.Employee;
+import com.example.demo.repository.EmployeeRepository;
+import com.example.demo.service.EmployeeService;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
-@Transactional
-public class ScheduleServiceImpl implements ScheduleService {
+public class EmployeeServiceImpl implements EmployeeService {
 
-    private final ShiftTemplateRepository shiftTemplateRepository;
-    private final EmployeeRepository employeeRepository;
-    private final GeneratedShiftScheduleRepository generatedShiftScheduleRepository;
+    private final EmployeeRepository repository;
 
-    public ScheduleServiceImpl(ShiftTemplateRepository shiftTemplateRepository,
-                               EmployeeRepository employeeRepository,
-                               GeneratedShiftScheduleRepository generatedShiftScheduleRepository) {
-        this.shiftTemplateRepository = shiftTemplateRepository;
-        this.employeeRepository = employeeRepository;
-        this.generatedShiftScheduleRepository = generatedShiftScheduleRepository;
+    public EmployeeServiceImpl(EmployeeRepository repository) {
+        this.repository = repository;
     }
 
     @Override
-    public List<GeneratedShiftSchedule> generateForDate(LocalDate date) {
-        List<ShiftTemplate> templates = shiftTemplateRepository.findAll();
-        List<Employee> employees = employeeRepository.findAll();
-
-        // simple example: assign first employee to first template
-        GeneratedShiftSchedule g = new GeneratedShiftSchedule();
-        g.setShiftDate(date);
-        g.setStartTime(templates.get(0).getStartTime());
-        g.setEndTime(templates.get(0).getEndTime());
-        g.setEmployee(employees.get(0));
-        g.setDepartment(templates.get(0).getDepartment());
-        g.setShiftTemplate(templates.get(0)); // make sure setter exists in entity
-        generatedShiftScheduleRepository.save(g);
-
-        return generatedShiftScheduleRepository.findByShiftDate(date);
+    public List<Employee> getAll() {
+        return repository.findAll();
     }
 
     @Override
-    public List<GeneratedShiftSchedule> getByDate(LocalDate date) {
-        return generatedShiftScheduleRepository.findByShiftDate(date);
+    public Optional<Employee> findByEmail(String email) {
+        return repository.findByEmail(email);
+    }
+
+    @Override
+    public Optional<Employee> findById(Long id) {
+        return repository.findById(id);
+    }
+
+    @Override
+    public Employee save(Employee employee) {
+        return repository.save(employee);
+    }
+
+    @Override
+    public void deleteEmployee(Long id) {
+        repository.deleteById(id);
     }
 }
