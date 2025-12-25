@@ -2,39 +2,29 @@ package com.example.demo.controller;
 
 import com.example.demo.model.EmployeeAvailability;
 import com.example.demo.service.AvailabilityService;
-import org.springframework.web.bind.annotation.*;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("/availability")
+@RequestMapping("/api/availability")
 public class AvailabilityController {
+    private final AvailabilityService availabilityService;
 
-    private final AvailabilityService service;
-
-    public AvailabilityController(AvailabilityService service) {
-        this.service = service;
+    public AvailabilityController(AvailabilityService availabilityService) {
+        this.availabilityService = availabilityService;
     }
 
-    @PostMapping
-    public EmployeeAvailability create(@RequestBody EmployeeAvailability av) {
-        return service.create(av);
-    }
-
-    @PutMapping("/{id}")
-    public EmployeeAvailability update(@PathVariable Long id,
-                                       @RequestBody EmployeeAvailability av) {
-        return service.update(id, av);
-    }
-
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
-        service.delete(id);
+    @PostMapping("/{employeeId}")
+    public ResponseEntity<EmployeeAvailability> create(@PathVariable Long employeeId, @RequestBody EmployeeAvailability availability) {
+        return ResponseEntity.ok(availabilityService.create(availability));
     }
 
     @GetMapping("/date/{date}")
-    public List<EmployeeAvailability> getByDate(@PathVariable String date) {
-        return service.getByDate(LocalDate.parse(date));
+    public ResponseEntity<List<EmployeeAvailability>> byDate(@PathVariable String date) {
+        LocalDate localDate = LocalDate.parse(date);
+        return ResponseEntity.ok(availabilityService.getByDate(localDate));
     }
 }
