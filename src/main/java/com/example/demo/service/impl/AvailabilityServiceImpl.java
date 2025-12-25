@@ -2,32 +2,39 @@ package com.example.demo.service.impl;
 
 import com.example.demo.model.EmployeeAvailability;
 import com.example.demo.repository.AvailabilityRepository;
-import com.example.demo.repository.EmployeeRepository;
 import com.example.demo.service.AvailabilityService;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
 
+@Service  
 public class AvailabilityServiceImpl implements AvailabilityService {
 
     private final AvailabilityRepository repo;
-    private final EmployeeRepository empRepo;
 
-    public AvailabilityServiceImpl(AvailabilityRepository repo, EmployeeRepository empRepo) {
+    public AvailabilityServiceImpl(AvailabilityRepository repo) {
         this.repo = repo;
-        this.empRepo = empRepo;
     }
 
+    @Override
     public EmployeeAvailability create(EmployeeAvailability av) {
+
         if (av.getEmployee() != null && av.getAvailableDate() != null) {
             Long empId = av.getEmployee().getId();
-            if (repo.findByEmployee_IdAndAvailableDate(empId, av.getAvailableDate()).isPresent())
-                throw new RuntimeException("Availability already exists");
+
+            repo.findByEmployee_IdAndAvailableDate(empId, av.getAvailableDate())
+                .ifPresent(a -> {
+                    throw new RuntimeException("Availability already exists");
+                });
         }
+
         return repo.save(av);
     }
 
+    @Override
     public EmployeeAvailability update(Long id, EmployeeAvailability av) {
+
         EmployeeAvailability old = repo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Availability not found"));
 
@@ -37,12 +44,14 @@ public class AvailabilityServiceImpl implements AvailabilityService {
         return repo.save(old);
     }
 
+    @Override
     public void delete(Long id) {
         EmployeeAvailability av = repo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Availability not found"));
         repo.delete(av);
     }
 
+    @Override
     public List<EmployeeAvailability> getByDate(LocalDate date) {
         return repo.findByAvailableDateAndAvailable(date, true);
     }

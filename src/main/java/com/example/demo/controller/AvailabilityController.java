@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.model.EmployeeAvailability;
 import com.example.demo.service.AvailabilityService;
 import org.springframework.web.bind.annotation.*;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -22,7 +23,8 @@ public class AvailabilityController {
     }
 
     @PutMapping("/{id}")
-    public EmployeeAvailability update(@PathVariable Long id, @RequestBody EmployeeAvailability av) {
+    public EmployeeAvailability update(@PathVariable Long id,
+                                       @RequestBody EmployeeAvailability av) {
         return service.update(id, av);
     }
 
