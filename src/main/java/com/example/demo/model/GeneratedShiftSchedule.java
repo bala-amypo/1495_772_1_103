@@ -1,38 +1,44 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Entity
-@Table(name = "generated_shift_schedules")
+@Table(name = "generated_shift_schedules",
+       uniqueConstraints = @UniqueConstraint(columnNames = {"shiftDate", "employee_id"}))
 public class GeneratedShiftSchedule {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     private LocalDate shiftDate;
 
+    @NotNull
     private LocalTime startTime;
 
+    @NotNull
     private LocalTime endTime;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "shift_template_id", nullable = false)
     private ShiftTemplate shiftTemplate;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "department_id", nullable = false)
     private Department department;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employee_id", nullable = false)
     private Employee employee;
 
     public GeneratedShiftSchedule() {}
 
     public GeneratedShiftSchedule(LocalDate shiftDate, LocalTime startTime, LocalTime endTime, 
-                                ShiftTemplate shiftTemplate, Department department, Employee employee) {
+                                  ShiftTemplate shiftTemplate, Department department, Employee employee) {
         this.shiftDate = shiftDate;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -41,6 +47,7 @@ public class GeneratedShiftSchedule {
         this.employee = employee;
     }
 
+    // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
