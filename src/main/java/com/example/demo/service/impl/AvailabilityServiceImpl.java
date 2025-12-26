@@ -10,23 +10,48 @@ import java.util.List;
 
 public class AvailabilityServiceImpl implements AvailabilityService {
 
-    private final AvailabilityRepository availabilityRepository;
-    private final EmployeeRepository employeeRepository;
+    private final AvailabilityRepository availabilityRepo;
+    private final EmployeeRepository employeeRepo;
 
-    public AvailabilityServiceImpl(AvailabilityRepository availabilityRepository,
-                                   EmployeeRepository employeeRepository) {
-        this.availabilityRepository = availabilityRepository;
-        this.employeeRepository = employeeRepository;
+    public AvailabilityServiceImpl(AvailabilityRepository availabilityRepo,
+                                   EmployeeRepository employeeRepo) {
+        this.availabilityRepo = availabilityRepo;
+        this.employeeRepo = employeeRepo;
     }
 
     @Override
-    public EmployeeAvailability save(EmployeeAvailability availability) {
-        return availabilityRepository.save(availability);
+    public EmployeeAvailability create(EmployeeAvailability availability) {
+        Long empId = availability.getEmployee().getId();
+        LocalDate date = availability.getAvailableDate();
+
+        if (date != null &&
+            availabilityRepo.findByEmployee_IdAndAvailableDate(empId, date).isPresent()) {
+            throw new RuntimeException("Availability already exists");
+        }
+
+        return availabilityRepo.save(availability);
     }
 
-    // ✅ REQUIRED BY INTERFACE
+    @Override
+    public EmployeeAvailability update(Long id, EmployeeAvailability updated) {
+        EmployeeAvailability existing = availabilityRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Availability not found"));
+
+        existing.setAvailable(updated.getAvailable());
+        existing.setAvailableDate(updated.getAvailableDate());
+
+        return availabilityRepo.save(existing);
+    }
+
+    @Override
+    public void delete(Long id) {
+        EmployeeAvailability av = availabilityRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Availability not found"));
+        availabilityRepo.delete(av);
+    }
+
     @Override
     public List<EmployeeAvailability> getByDate(LocalDate date) {
-        return availabilityRepository.findAll();
+        return availabilityRepo.findByAvailableDateAndAvailable(date, true);
     }
 }
