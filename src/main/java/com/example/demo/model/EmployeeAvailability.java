@@ -19,10 +19,20 @@ public class EmployeeAvailability {
 
     public EmployeeAvailability() {}
 
-    // ✅ REQUIRED
-    public EmployeeAvailability(Employee employee, LocalDate availableDate, boolean available) {
+    public EmployeeAvailability(Employee employee,
+                                LocalDate availableDate,
+                                boolean available) {
         this.employee = employee;
         this.availableDate = availableDate;
         this.available = available;
     }
+
+    // ✅ REQUIRED
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
+
+    public Employee getEmployee() { return employee; }
+    public LocalDate getAvailableDate() { return availableDate; }
+    public boolean isAvailable() { return available; }
 }

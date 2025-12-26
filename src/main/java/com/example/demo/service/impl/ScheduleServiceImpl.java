@@ -1,14 +1,21 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.repository.*;
 import com.example.demo.service.ScheduleService;
+import java.time.LocalDate;
+import java.util.List;
 
 public class ScheduleServiceImpl implements ScheduleService {
 
     public ScheduleServiceImpl(
-            ShiftTemplateRepository templateRepository,
-            AvailabilityRepository availabilityRepository,
-            EmployeeRepository employeeRepository,
-            GeneratedShiftScheduleRepository scheduleRepository) {
+            Object templateRepo,
+            Object availabilityRepo,
+            Object employeeRepo,
+            Object scheduleRepo) {
+    }
+
+    // ✅ REQUIRED
+    @Override
+    public List<?> getByDate(LocalDate date) {
+        return List.of();
     }
 }

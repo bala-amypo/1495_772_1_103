@@ -1,37 +1,45 @@
-package com.example.demo.controller;
+package com.example.demo.model;
 
-import com.example.demo.model.Department;
-import com.example.demo.model.ShiftTemplate;
-import com.example.demo.service.DepartmentService;
-import com.example.demo.service.ShiftTemplateService;
-import org.springframework.web.bind.annotation.*;
+import jakarta.persistence.*;
+import java.time.LocalTime;
 
-import java.util.List;
+@Entity
+@Table(name = "shift_templates")
+public class ShiftTemplate {
 
-@RestController
-@RequestMapping("/api/templates")
-public class ShiftTemplateController {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    private final ShiftTemplateService service;
-    private final DepartmentService departmentService;
+    private String templateName;
+    private LocalTime startTime;
+    private LocalTime endTime;
+    private String requiredSkills;
 
-    public ShiftTemplateController(ShiftTemplateService service,
-                                   DepartmentService departmentService) {
-        this.service = service;
-        this.departmentService = departmentService;
+    @ManyToOne
+    private Department department;
+
+    public ShiftTemplate() {}
+
+    public ShiftTemplate(String templateName,
+                         LocalTime startTime,
+                         LocalTime endTime,
+                         String requiredSkills,
+                         Department department) {
+        this.templateName = templateName;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.requiredSkills = requiredSkills;
+        this.department = department;
     }
 
-    @PostMapping("/department/{departmentId}")
-    public ShiftTemplate create(@PathVariable Long departmentId,
-                                @RequestBody ShiftTemplate template) {
+    // ✅ REQUIRED
+    public LocalTime getStartTime() { return startTime; }
+    public LocalTime getEndTime() { return endTime; }
+    public String getTemplateName() { return templateName; }
+    public Department getDepartment() { return department; }
 
-        Department dept = departmentService.get(departmentId);
-        template.setDepartment(dept);
-        return service.create(template);
-    }
-
-    @GetMapping("/department/{departmentId}")
-    public List<ShiftTemplate> getByDepartment(@PathVariable Long departmentId) {
-        return service.getByDepartment(departmentId);
+    public void setDepartment(Department department) {
+        this.department = department;
     }
 }

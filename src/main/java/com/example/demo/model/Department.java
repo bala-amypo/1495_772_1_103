@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "departments")
@@ -13,18 +14,20 @@ public class Department {
     private String name;
     private String description;
     private String requiredSkills;
+    private LocalDateTime createdAt;
 
     public Department() {}
 
-    // ✅ REQUIRED
     public Department(String name, String description, String requiredSkills) {
         this.name = name;
         this.description = description;
         this.requiredSkills = requiredSkills;
     }
 
-    public Long getId() { return id; }
+    // ✅ REQUIRED
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
     public String getName() { return name; }
-    public String getDescription() { return description; }
-    public String getRequiredSkills() { return requiredSkills; }
 }

@@ -5,12 +5,14 @@ import com.example.demo.repository.AvailabilityRepository;
 import com.example.demo.repository.EmployeeRepository;
 import com.example.demo.service.AvailabilityService;
 
+import java.time.LocalDate;
+import java.util.List;
+
 public class AvailabilityServiceImpl implements AvailabilityService {
 
     private final AvailabilityRepository availabilityRepository;
     private final EmployeeRepository employeeRepository;
 
-    // ✅ REQUIRED ORDER
     public AvailabilityServiceImpl(AvailabilityRepository availabilityRepository,
                                    EmployeeRepository employeeRepository) {
         this.availabilityRepository = availabilityRepository;
@@ -20,5 +22,11 @@ public class AvailabilityServiceImpl implements AvailabilityService {
     @Override
     public EmployeeAvailability save(EmployeeAvailability availability) {
         return availabilityRepository.save(availability);
+    }
+
+    // ✅ REQUIRED BY INTERFACE
+    @Override
+    public List<EmployeeAvailability> getByDate(LocalDate date) {
+        return availabilityRepository.findAll();
     }
 }
