@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 
-@Service   // ✅ THIS WAS MISSING
+@Service   // 🔥 THIS WAS MISSING
 public class AvailabilityServiceImpl implements AvailabilityService {
 
     private final AvailabilityRepository availabilityRepo;
