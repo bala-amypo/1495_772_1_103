@@ -19,12 +19,15 @@ public class EmployeeServiceImpl implements EmployeeService {
         if (employee.getMaxWeeklyHours() <= 0) {
             throw new RuntimeException("Max hours must be greater than zero");
         }
+
         if (employeeRepository.existsByEmail(employee.getEmail())) {
             throw new RuntimeException("Employee already exists");
         }
+
         if (employee.getRole() == null) {
             employee.setRole("STAFF");
         }
+
         return employeeRepository.save(employee);
     }
 
