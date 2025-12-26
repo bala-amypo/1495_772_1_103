@@ -1,42 +1,74 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
-import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@Table(name = "employee_availability")
-public class EmployeeAvailability {
+@Table(name = "employees")
+public class Employee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "employee_id", nullable = false)
-    private Employee employee;
+    @Column(nullable = false)
+    private String fullName;
 
-    private LocalDate availableDate;
+    @Column(nullable = false, unique = true)
+    private String email;
 
-    private Boolean available;
+    @Column(nullable = false)
+    private String role;
 
-    public EmployeeAvailability() {}
+    @Column(nullable = false)
+    private String skills;
 
-    public EmployeeAvailability(Employee employee, LocalDate availableDate, Boolean available) {
-        this.employee = employee;
-        this.availableDate = availableDate;
-        this.available = available;
+    @Column(nullable = false)
+    private int maxWeeklyHours;
+
+    public Employee() {}
+
+    public Employee(String fullName, String email, String role,
+                    String skills, int maxWeeklyHours) {
+        this.fullName = fullName;
+        this.email = email;
+        this.role = role != null ? role : "STAFF";
+        this.skills = skills;
+        this.maxWeeklyHours = maxWeeklyHours;
     }
 
-    // getters & setters
+    /** BUSINESS LOGIC (NOT STORED IN DB) */
+    @Transient
+    public Set<String> getSkills() {
+        if (skills == null || skills.isEmpty()) {
+            return new HashSet<>();
+        }
+        return new HashSet<>(Arrays.asList(skills.split(",")));
+    }
+
+    // ===== Getters & Setters =====
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-    public Employee getEmployee() { return employee; }
-    public void setEmployee(Employee employee) { this.employee = employee; }
+    public String getFullName() { return fullName; }
+    public void setFullName(String fullName) { this.fullName = fullName; }
 
-    public LocalDate getAvailableDate() { return availableDate; }
-    public void setAvailableDate(LocalDate availableDate) { this.availableDate = availableDate; }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
-    public Boolean getAvailable() { return available; }
-    public void setAvailable(Boolean available) { this.available = available; }
+    public String getRole() { return role; }
+    public void setRole(String role) {
+        this.role = role != null ? role : "STAFF";
+    }
+
+    public String getSkillsRaw() { return skills; }
+    public void setSkills(String skills) { this.skills = skills; }
+
+    public int getMaxWeeklyHours() { return maxWeeklyHours; }
+    public void setMaxWeeklyHours(int maxWeeklyHours) {
+        this.maxWeeklyHours = maxWeeklyHours;
+    }
 }
