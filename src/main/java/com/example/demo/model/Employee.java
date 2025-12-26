@@ -1,16 +1,27 @@
 package com.example.demo.model;
 
+import jakarta.persistence.*;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+@Entity
+@Table(name = "employees")
 public class Employee {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String fullName;
+
+    @Column(unique = true, nullable = false)
     private String email;
+
     private String role;
+
     private String skills;
+
     private int maxWeeklyHours;
 
     public Employee() {}
@@ -23,12 +34,13 @@ public class Employee {
         this.maxWeeklyHours = maxWeeklyHours;
     }
 
+    /* ---------- Helpers ---------- */
     public Set<String> getSkills() {
         if (skills == null || skills.isEmpty()) return new HashSet<>();
         return new HashSet<>(Arrays.asList(skills.split(",")));
     }
 
-    // Getters & Setters
+    /* ---------- Getters & Setters ---------- */
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
