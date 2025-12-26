@@ -4,9 +4,12 @@ import com.example.demo.model.ShiftTemplate;
 import com.example.demo.repository.DepartmentRepository;
 import com.example.demo.service.ShiftTemplateService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@RestController
+@RequestMapping("/shift-templates")
 public class ShiftTemplateController {
 
     private final ShiftTemplateService shiftTemplateService;
@@ -18,15 +21,20 @@ public class ShiftTemplateController {
         this.departmentRepository = departmentRepository;
     }
 
+    @GetMapping
     public ResponseEntity<List<ShiftTemplate>> list() {
         return ResponseEntity.ok(shiftTemplateService.getAll());
     }
 
-    public ResponseEntity<List<ShiftTemplate>> byDepartment(Long deptId) {
+    @GetMapping("/department/{deptId}")
+    public ResponseEntity<List<ShiftTemplate>> byDepartment(
+            @PathVariable Long deptId) {
         return ResponseEntity.ok(shiftTemplateService.getByDepartment(deptId));
     }
 
-    public ResponseEntity<ShiftTemplate> create(ShiftTemplate shiftTemplate) {
+    @PostMapping
+    public ResponseEntity<ShiftTemplate> create(
+            @RequestBody ShiftTemplate shiftTemplate) {
         return ResponseEntity.ok(shiftTemplateService.create(shiftTemplate));
     }
 }
