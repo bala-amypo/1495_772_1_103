@@ -4,10 +4,13 @@ import com.example.demo.model.EmployeeAvailability;
 import com.example.demo.repository.EmployeeRepository;
 import com.example.demo.service.AvailabilityService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
 
+@RestController
+@RequestMapping("/availability")
 public class AvailabilityController {
 
     private final AvailabilityService availabilityService;
@@ -19,20 +22,29 @@ public class AvailabilityController {
         this.employeeRepository = employeeRepository;
     }
 
-    public ResponseEntity<List<EmployeeAvailability>> byDate(String date) {
-        LocalDate d = LocalDate.parse(date);
-        return ResponseEntity.ok(availabilityService.getByDate(d));
+    @GetMapping("/date/{date}")
+    public ResponseEntity<List<EmployeeAvailability>> byDate(
+            @PathVariable String date) {
+        return ResponseEntity.ok(
+                availabilityService.getByDate(LocalDate.parse(date))
+        );
     }
 
-    public ResponseEntity<EmployeeAvailability> create(EmployeeAvailability availability) {
+    @PostMapping
+    public ResponseEntity<EmployeeAvailability> create(
+            @RequestBody EmployeeAvailability availability) {
         return ResponseEntity.ok(availabilityService.create(availability));
     }
 
-    public ResponseEntity<EmployeeAvailability> update(Long id, EmployeeAvailability availability) {
+    @PutMapping("/{id}")
+    public ResponseEntity<EmployeeAvailability> update(
+            @PathVariable Long id,
+            @RequestBody EmployeeAvailability availability) {
         return ResponseEntity.ok(availabilityService.update(id, availability));
     }
 
-    public ResponseEntity<String> delete(Long id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> delete(@PathVariable Long id) {
         availabilityService.delete(id);
         return ResponseEntity.ok("Deleted");
     }
