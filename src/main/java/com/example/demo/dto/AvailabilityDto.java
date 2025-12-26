@@ -10,7 +10,7 @@ public class AvailabilityDto {
 
     public AvailabilityDto() {}
 
-    // ✅ REQUIRED BY TEST
+   
     public LocalDate getAvailableDate() {
         return availableDate;
     }
