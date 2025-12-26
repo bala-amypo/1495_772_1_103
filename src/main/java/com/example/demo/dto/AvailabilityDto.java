@@ -5,16 +5,18 @@ import java.time.LocalDate;
 public class AvailabilityDto {
 
     private Long employeeId;
-    private LocalDate date;
+    private LocalDate availableDate;
     private Boolean available;
 
-    public AvailabilityDto() {
+    public AvailabilityDto() {}
+
+    // ✅ REQUIRED BY TEST
+    public LocalDate getAvailableDate() {
+        return availableDate;
     }
 
-    public AvailabilityDto(Long employeeId, LocalDate date, Boolean available) {
-        this.employeeId = employeeId;
-        this.date = date;
-        this.available = available;
+    public void setAvailableDate(LocalDate availableDate) {
+        this.availableDate = availableDate;
     }
 
     public Long getEmployeeId() {
@@ -23,14 +25,6 @@ public class AvailabilityDto {
 
     public void setEmployeeId(Long employeeId) {
         this.employeeId = employeeId;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
     }
 
     public Boolean getAvailable() {
