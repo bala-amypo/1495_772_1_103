@@ -7,7 +7,7 @@ import java.time.LocalDate;
 @Table(
     name = "employee_availability",
     uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"employee_id", "availableDate"})
+        @UniqueConstraint(columnNames = {"employee_id", "available_date"})
     }
 )
 public class EmployeeAvailability {
@@ -20,6 +20,7 @@ public class EmployeeAvailability {
     @JoinColumn(name = "employee_id")
     private Employee employee;
 
+    @Column(name = "available_date")
     private LocalDate availableDate;
 
     private Boolean available;
@@ -32,7 +33,7 @@ public class EmployeeAvailability {
         this.available = available;
     }
 
-    /* ---------- Getters & Setters ---------- */
+    // getters & setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

@@ -34,13 +34,12 @@ public class Employee {
         this.maxWeeklyHours = maxWeeklyHours;
     }
 
-    /* ---------- Helpers ---------- */
     public Set<String> getSkills() {
         if (skills == null || skills.isEmpty()) return new HashSet<>();
         return new HashSet<>(Arrays.asList(skills.split(",")));
     }
 
-    /* ---------- Getters & Setters ---------- */
+    // getters & setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
