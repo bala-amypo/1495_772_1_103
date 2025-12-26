@@ -1,12 +1,9 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
-@Table(name = "employees")
 public class Employee {
 
     @Id
@@ -14,14 +11,9 @@ public class Employee {
     private Long id;
 
     private String fullName;
-
-    @Column(unique = true, nullable = false)
     private String email;
-
     private String role;
-
     private String skills;
-
     private int maxWeeklyHours;
 
     public Employee() {}
@@ -29,17 +21,18 @@ public class Employee {
     public Employee(String fullName, String email, String role, String skills, int maxWeeklyHours) {
         this.fullName = fullName;
         this.email = email;
-        this.role = role != null ? role : "STAFF";
+        this.role = (role == null ? "STAFF" : role);
         this.skills = skills;
         this.maxWeeklyHours = maxWeeklyHours;
     }
 
-    public Set<String> getSkills() {
-        if (skills == null || skills.isEmpty()) return new HashSet<>();
-        return new HashSet<>(Arrays.asList(skills.split(",")));
+    /* ----------------- Helpers ----------------- */
+    public List<String> getSkills() {
+        if (skills == null) return Collections.emptyList();
+        return Arrays.asList(skills.split(","));
     }
 
-    // Getters & Setters
+    /* ----------------- Getters / Setters ----------------- */
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -50,7 +43,7 @@ public class Employee {
     public void setEmail(String email) { this.email = email; }
 
     public String getRole() { return role; }
-    public void setRole(String role) { this.role = role != null ? role : "STAFF"; }
+    public void setRole(String role) { this.role = role; }
 
     public String getSkillsRaw() { return skills; }
     public void setSkills(String skills) { this.skills = skills; }

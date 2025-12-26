@@ -1,18 +1,14 @@
 package com.example.demo.repository;
 
 import com.example.demo.model.ShiftTemplate;
+import org.springframework.data.jpa.repository.JpaRepository;
+
 import java.util.List;
 import java.util.Optional;
 
-public interface ShiftTemplateRepository {
+public interface ShiftTemplateRepository extends JpaRepository<ShiftTemplate, Long> {
 
-    ShiftTemplate save(ShiftTemplate shiftTemplate);
-
-    List<ShiftTemplate> findAll();
+    Optional<ShiftTemplate> findByTemplateNameAndDepartment_Id(String templateName, Long departmentId);
 
     List<ShiftTemplate> findByDepartment_Id(Long departmentId);
-
-    Optional<ShiftTemplate> findByTemplateNameAndDepartment_Id(
-            String templateName, Long departmentId
-    );
 }

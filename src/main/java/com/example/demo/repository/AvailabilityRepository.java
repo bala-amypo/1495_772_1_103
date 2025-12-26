@@ -7,12 +7,11 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-public interface AvailabilityRepository
-        extends JpaRepository<EmployeeAvailability, Long> {
+public interface AvailabilityRepository extends JpaRepository<EmployeeAvailability, Long> {
 
-    Optional<EmployeeAvailability>
-    findByEmployee_IdAndAvailableDate(Long empId, LocalDate date);
+    Optional<EmployeeAvailability> findByEmployee_IdAndAvailableDate(Long employeeId, LocalDate date);
 
-    List<EmployeeAvailability>
-    findByAvailableDateAndAvailable(LocalDate date, boolean available);
+    List<EmployeeAvailability> findByAvailableDateAndAvailable(LocalDate date, Boolean available);
+
+    List<EmployeeAvailability> findByEmployee_Id(Long employeeId);
 }

@@ -1,23 +1,28 @@
 package com.example.demo.model;
 
+import jakarta.persistence.*;
 import java.time.LocalTime;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
+@Entity
 public class ShiftTemplate {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String templateName;
     private LocalTime startTime;
     private LocalTime endTime;
     private String requiredSkills;
+
+    @ManyToOne
     private Department department;
 
     public ShiftTemplate() {}
 
-    public ShiftTemplate(String templateName, LocalTime startTime,
-                         LocalTime endTime, String requiredSkills, Department department) {
+    public ShiftTemplate(String templateName, LocalTime startTime, LocalTime endTime,
+                         String requiredSkills, Department department) {
         this.templateName = templateName;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -25,12 +30,13 @@ public class ShiftTemplate {
         this.department = department;
     }
 
-    public Set<String> getRequiredSkills() {
-        if (requiredSkills == null || requiredSkills.isEmpty()) return new HashSet<>();
-        return new HashSet<>(Arrays.asList(requiredSkills.split(",")));
+    /* ----------------- Helpers ----------------- */
+    public List<String> getRequiredSkills() {
+        if (requiredSkills == null) return Collections.emptyList();
+        return Arrays.asList(requiredSkills.split(","));
     }
 
-    // Getters & Setters
+    /* ----------------- Getters / Setters ----------------- */
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

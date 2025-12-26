@@ -1,12 +1,15 @@
 package com.example.demo.model;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import jakarta.persistence.*;
+import java.util.*;
 
+@Entity
 public class Department {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
     private String description;
     private String requiredSkills;
@@ -19,12 +22,13 @@ public class Department {
         this.requiredSkills = requiredSkills;
     }
 
-    public Set<String> getRequiredSkills() {
-        if (requiredSkills == null || requiredSkills.isEmpty()) return new HashSet<>();
-        return new HashSet<>(Arrays.asList(requiredSkills.split(",")));
+    /* ----------------- Helpers ----------------- */
+    public List<String> getRequiredSkills() {
+        if (requiredSkills == null) return Collections.emptyList();
+        return Arrays.asList(requiredSkills.split(","));
     }
 
-    // Getters & Setters
+    /* ----------------- Getters / Setters ----------------- */
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

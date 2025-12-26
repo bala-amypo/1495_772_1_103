@@ -1,17 +1,29 @@
 package com.example.demo.model;
 
+import jakarta.persistence.*;
 import java.time.LocalDate;
 
+@Entity
 public class GeneratedShiftSchedule {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private LocalDate shiftDate;
+
+    @ManyToOne
     private Employee employee;
+
+    @ManyToOne
     private ShiftTemplate shiftTemplate;
+
+    @ManyToOne
+    private Department department;
 
     public GeneratedShiftSchedule() {}
 
-    // Getters & Setters
+    /* ----------------- Getters / Setters ----------------- */
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -23,4 +35,7 @@ public class GeneratedShiftSchedule {
 
     public ShiftTemplate getShiftTemplate() { return shiftTemplate; }
     public void setShiftTemplate(ShiftTemplate shiftTemplate) { this.shiftTemplate = shiftTemplate; }
+
+    public Department getDepartment() { return department; }
+    public void setDepartment(Department department) { this.department = department; }
 }

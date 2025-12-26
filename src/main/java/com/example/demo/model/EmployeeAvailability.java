@@ -4,25 +4,16 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(
-    name = "employee_availability",
-    uniqueConstraints = @UniqueConstraint(
-        columnNames = {"employee_id", "available_date"}
-    )
-)
 public class EmployeeAvailability {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "employee_id")
+    @ManyToOne
     private Employee employee;
 
-    @Column(name = "available_date")
     private LocalDate availableDate;
-
     private Boolean available;
 
     public EmployeeAvailability() {}
@@ -33,6 +24,7 @@ public class EmployeeAvailability {
         this.available = available;
     }
 
+    /* ----------------- Getters / Setters ----------------- */
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -45,4 +37,3 @@ public class EmployeeAvailability {
     public Boolean getAvailable() { return available; }
     public void setAvailable(Boolean available) { this.available = available; }
 }
-    
