@@ -12,25 +12,23 @@ import java.util.List;
 @RequestMapping("/schedule")
 public class ScheduleController {
 
-    private final ScheduleService scheduleService;
+    private final ScheduleService service;
 
-    public ScheduleController(ScheduleService scheduleService) {
-        this.scheduleService = scheduleService;
+    public ScheduleController(ScheduleService service) {
+        this.service = service;
     }
 
-    @PostMapping("/generate/{date}")
-    public ResponseEntity<List<GeneratedShiftSchedule>> generate(
-            @PathVariable String date) {
+    @GetMapping("/generate/{date}")
+    public ResponseEntity<List<GeneratedShiftSchedule>> generate(@PathVariable String date) {
         return ResponseEntity.ok(
-                scheduleService.generateForDate(LocalDate.parse(date))
+                service.generateForDate(LocalDate.parse(date))
         );
     }
 
-    @GetMapping("/{date}")
-    public ResponseEntity<List<GeneratedShiftSchedule>> byDate(
-            @PathVariable String date) {
+    @GetMapping("/date/{date}")
+    public ResponseEntity<List<GeneratedShiftSchedule>> byDate(@PathVariable String date) {
         return ResponseEntity.ok(
-                scheduleService.getByDate(LocalDate.parse(date))
+                service.getByDate(LocalDate.parse(date))
         );
     }
 }

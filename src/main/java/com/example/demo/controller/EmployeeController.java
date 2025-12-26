@@ -11,37 +11,30 @@ import java.util.List;
 @RequestMapping("/employees")
 public class EmployeeController {
 
-    private final EmployeeService employeeService;
+    private final EmployeeService service;
 
-    public EmployeeController(EmployeeService employeeService) {
-        this.employeeService = employeeService;
+    public EmployeeController(EmployeeService service) {
+        this.service = service;
     }
 
     @GetMapping
     public ResponseEntity<List<Employee>> list() {
-        return ResponseEntity.ok(employeeService.getAll());
+        return ResponseEntity.ok(service.getAll());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Employee> get(@PathVariable Long id) {
-        return ResponseEntity.ok(employeeService.getEmployee(id));
+        return ResponseEntity.ok(service.getEmployee(id));
     }
 
     @PostMapping
     public ResponseEntity<Employee> create(@RequestBody Employee employee) {
-        return ResponseEntity.ok(employeeService.createEmployee(employee));
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Employee> update(
-            @PathVariable Long id,
-            @RequestBody Employee employee) {
-        return ResponseEntity.ok(employeeService.updateEmployee(id, employee));
+        return ResponseEntity.ok(service.createEmployee(employee));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id) {
-        employeeService.deleteEmployee(id);
+        service.deleteEmployee(id);
         return ResponseEntity.ok("Deleted");
     }
 }

@@ -3,55 +3,57 @@ package com.example.demo.service.impl;
 import com.example.demo.model.*;
 import com.example.demo.repository.*;
 import com.example.demo.service.ScheduleService;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
+@Service
 public class ScheduleServiceImpl implements ScheduleService {
 
     private final ShiftTemplateRepository shiftRepo;
     private final AvailabilityRepository availabilityRepo;
     private final EmployeeRepository employeeRepo;
     private final GeneratedShiftScheduleRepository scheduleRepo;
-    private final DepartmentRepository deptRepo;
+    private final DepartmentRepository departmentRepo;
 
     public ScheduleServiceImpl(ShiftTemplateRepository shiftRepo,
                                AvailabilityRepository availabilityRepo,
                                EmployeeRepository employeeRepo,
                                GeneratedShiftScheduleRepository scheduleRepo,
-                               DepartmentRepository deptRepo) {
+                               DepartmentRepository departmentRepo) {
         this.shiftRepo = shiftRepo;
         this.availabilityRepo = availabilityRepo;
         this.employeeRepo = employeeRepo;
         this.scheduleRepo = scheduleRepo;
-        this.deptRepo = deptRepo;
+        this.departmentRepo = departmentRepo;
     }
 
     @Override
     public List<GeneratedShiftSchedule> generateForDate(LocalDate date) {
+
         List<GeneratedShiftSchedule> result = new ArrayList<>();
 
-        List<Department> departments = deptRepo.findAll();
         List<EmployeeAvailability> available =
                 availabilityRepo.findByAvailableDateAndAvailable(date, true);
 
-        for (Department dept : departments) {
-            List<ShiftTemplate> shifts = shiftRepo.findByDepartment_Id(dept.getId());
+        if (available.isEmpty()) return result;
 
-            for (ShiftTemplate shift : shifts) {
+        for (Department dept : departmentRepo.findAll()) {
+
+            for (ShiftTemplate st : shiftRepo.findByDepartment_Id(dept.getId())) {
+
                 for (EmployeeAvailability av : available) {
+
                     Employee emp = av.getEmployee();
 
-                    Set<String> empSkills = emp.getSkills();
-                    Set<String> shiftSkills = shift.getRequiredSkills();
+                    if (emp.getSkills().containsAll(st.getRequiredSkills())) {
 
-                    if (empSkills.containsAll(shiftSkills)) {
                         GeneratedShiftSchedule g = new GeneratedShiftSchedule();
-                        g.setShiftDate(date);
+                        g.setDepartment(dept);
                         g.setEmployee(emp);
-                        g.setShiftTemplate(shift);
+                        g.setShiftTemplate(st);
+                        g.setShiftDate(date);
 
                         result.add(scheduleRepo.save(g));
                         break;

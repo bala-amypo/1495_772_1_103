@@ -12,29 +12,22 @@ import java.util.List;
 @RequestMapping("/shift-templates")
 public class ShiftTemplateController {
 
-    private final ShiftTemplateService shiftTemplateService;
+    private final ShiftTemplateService service;
     private final DepartmentRepository departmentRepository;
 
-    public ShiftTemplateController(ShiftTemplateService shiftTemplateService,
+    public ShiftTemplateController(ShiftTemplateService service,
                                    DepartmentRepository departmentRepository) {
-        this.shiftTemplateService = shiftTemplateService;
+        this.service = service;
         this.departmentRepository = departmentRepository;
     }
 
     @GetMapping
     public ResponseEntity<List<ShiftTemplate>> list() {
-        return ResponseEntity.ok(shiftTemplateService.getAll());
-    }
-
-    @GetMapping("/department/{deptId}")
-    public ResponseEntity<List<ShiftTemplate>> byDepartment(
-            @PathVariable Long deptId) {
-        return ResponseEntity.ok(shiftTemplateService.getByDepartment(deptId));
+        return ResponseEntity.ok(service.getAll());
     }
 
     @PostMapping
-    public ResponseEntity<ShiftTemplate> create(
-            @RequestBody ShiftTemplate shiftTemplate) {
-        return ResponseEntity.ok(shiftTemplateService.create(shiftTemplate));
+    public ResponseEntity<ShiftTemplate> create(@RequestBody ShiftTemplate st) {
+        return ResponseEntity.ok(service.create(st));
     }
 }

@@ -11,30 +11,30 @@ import java.util.List;
 @RequestMapping("/departments")
 public class DepartmentController {
 
-    private final DepartmentService departmentService;
+    private final DepartmentService service;
 
-    public DepartmentController(DepartmentService departmentService) {
-        this.departmentService = departmentService;
+    public DepartmentController(DepartmentService service) {
+        this.service = service;
     }
 
     @GetMapping
     public ResponseEntity<List<Department>> list() {
-        return ResponseEntity.ok(departmentService.getAll());
+        return ResponseEntity.ok(service.getAll());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Department> get(@PathVariable Long id) {
-        return ResponseEntity.ok(departmentService.get(id));
+        return ResponseEntity.ok(service.get(id));
     }
 
     @PostMapping
     public ResponseEntity<Department> create(@RequestBody Department department) {
-        return ResponseEntity.ok(departmentService.create(department));
+        return ResponseEntity.ok(service.create(department));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id) {
-        departmentService.delete(id);
+        service.delete(id);
         return ResponseEntity.ok("Deleted");
     }
 }

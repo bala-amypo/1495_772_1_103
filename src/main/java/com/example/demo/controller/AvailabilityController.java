@@ -13,39 +13,23 @@ import java.util.List;
 @RequestMapping("/availability")
 public class AvailabilityController {
 
-    private final AvailabilityService availabilityService;
+    private final AvailabilityService service;
     private final EmployeeRepository employeeRepository;
 
-    public AvailabilityController(AvailabilityService availabilityService,
+    public AvailabilityController(AvailabilityService service,
                                   EmployeeRepository employeeRepository) {
-        this.availabilityService = availabilityService;
+        this.service = service;
         this.employeeRepository = employeeRepository;
     }
 
     @GetMapping("/date/{date}")
-    public ResponseEntity<List<EmployeeAvailability>> byDate(
-            @PathVariable String date) {
-        return ResponseEntity.ok(
-                availabilityService.getByDate(LocalDate.parse(date))
-        );
+    public ResponseEntity<List<EmployeeAvailability>> byDate(@PathVariable String date) {
+        LocalDate d = LocalDate.parse(date);
+        return ResponseEntity.ok(service.getByDate(d));
     }
 
     @PostMapping
-    public ResponseEntity<EmployeeAvailability> create(
-            @RequestBody EmployeeAvailability availability) {
-        return ResponseEntity.ok(availabilityService.create(availability));
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<EmployeeAvailability> update(
-            @PathVariable Long id,
-            @RequestBody EmployeeAvailability availability) {
-        return ResponseEntity.ok(availabilityService.update(id, availability));
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable Long id) {
-        availabilityService.delete(id);
-        return ResponseEntity.ok("Deleted");
+    public ResponseEntity<EmployeeAvailability> create(@RequestBody EmployeeAvailability av) {
+        return ResponseEntity.ok(service.create(av));
     }
 }
