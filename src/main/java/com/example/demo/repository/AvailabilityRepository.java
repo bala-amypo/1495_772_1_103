@@ -14,5 +14,5 @@ public interface AvailabilityRepository
     findByEmployee_IdAndAvailableDate(Long empId, LocalDate date);
 
     List<EmployeeAvailability>
-    findByAvailableDateAndAvailable(LocalDate date, Boolean available);
+    findByAvailableDateAndAvailable(LocalDate date, boolean available);
 }
