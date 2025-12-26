@@ -68,7 +68,7 @@ public class Department {
         this.requiredSkills = requiredSkills;
     }
 
-    // ✅ THIS FIXES THE ERROR
+   
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
