@@ -2,37 +2,36 @@ package com.example.demo.controller;
 
 import com.example.demo.model.Employee;
 import com.example.demo.service.EmployeeService;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("/api/employees")
 public class EmployeeController {
 
-    private final EmployeeService service;
+    private final EmployeeService employeeService;
 
-    public EmployeeController(EmployeeService service) {
-        this.service = service;
+    public EmployeeController(EmployeeService employeeService) {
+        this.employeeService = employeeService;
     }
 
-    @PostMapping("/register")
-    public Employee create(@RequestBody Employee employee) {
-        return service.createEmployee(employee);
+    public ResponseEntity<List<Employee>> list() {
+        return ResponseEntity.ok(employeeService.getAll());
     }
 
-    @GetMapping("/all")
-    public List<Employee> getAll() {
-        return service.getAll();
+    public ResponseEntity<Employee> get(Long id) {
+        return ResponseEntity.ok(employeeService.getEmployee(id));
     }
 
-    @GetMapping("/{id}")
-    public Employee get(@PathVariable Long id) {
-        return service.getEmployee(id);
+    public ResponseEntity<Employee> create(Employee employee) {
+        return ResponseEntity.ok(employeeService.createEmployee(employee));
     }
 
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
-        service.deleteEmployee(id);
+    public ResponseEntity<Employee> update(Long id, Employee employee) {
+        return ResponseEntity.ok(employeeService.updateEmployee(id, employee));
+    }
+
+    public ResponseEntity<String> delete(Long id) {
+        employeeService.deleteEmployee(id);
+        return ResponseEntity.ok("Deleted");
     }
 }

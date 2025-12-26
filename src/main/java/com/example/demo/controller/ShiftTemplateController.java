@@ -1,45 +1,32 @@
-package com.example.demo.model;
+package com.example.demo.controller;
 
-import jakarta.persistence.*;
-import java.time.LocalTime;
+import com.example.demo.model.ShiftTemplate;
+import com.example.demo.repository.DepartmentRepository;
+import com.example.demo.service.ShiftTemplateService;
+import org.springframework.http.ResponseEntity;
 
-@Entity
-@Table(name = "shift_templates")
-public class ShiftTemplate {
+import java.util.List;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class ShiftTemplateController {
 
-    private String templateName;
-    private LocalTime startTime;
-    private LocalTime endTime;
-    private String requiredSkills;
+    private final ShiftTemplateService shiftTemplateService;
+    private final DepartmentRepository departmentRepository;
 
-    @ManyToOne
-    private Department department;
-
-    public ShiftTemplate() {}
-
-    public ShiftTemplate(String templateName,
-                         LocalTime startTime,
-                         LocalTime endTime,
-                         String requiredSkills,
-                         Department department) {
-        this.templateName = templateName;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.requiredSkills = requiredSkills;
-        this.department = department;
+    public ShiftTemplateController(ShiftTemplateService shiftTemplateService,
+                                   DepartmentRepository departmentRepository) {
+        this.shiftTemplateService = shiftTemplateService;
+        this.departmentRepository = departmentRepository;
     }
 
-    // ✅ REQUIRED
-    public LocalTime getStartTime() { return startTime; }
-    public LocalTime getEndTime() { return endTime; }
-    public String getTemplateName() { return templateName; }
-    public Department getDepartment() { return department; }
+    public ResponseEntity<List<ShiftTemplate>> list() {
+        return ResponseEntity.ok(shiftTemplateService.getAll());
+    }
 
-    public void setDepartment(Department department) {
-        this.department = department;
+    public ResponseEntity<List<ShiftTemplate>> byDepartment(Long deptId) {
+        return ResponseEntity.ok(shiftTemplateService.getByDepartment(deptId));
+    }
+
+    public ResponseEntity<ShiftTemplate> create(ShiftTemplate shiftTemplate) {
+        return ResponseEntity.ok(shiftTemplateService.create(shiftTemplate));
     }
 }

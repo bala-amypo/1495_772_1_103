@@ -1,38 +1,39 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.Employee;
 import com.example.demo.model.EmployeeAvailability;
+import com.example.demo.repository.EmployeeRepository;
 import com.example.demo.service.AvailabilityService;
-import com.example.demo.service.EmployeeService;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
 import java.util.List;
 
-@RestController
-@RequestMapping("/api/availability")
 public class AvailabilityController {
 
-    private final AvailabilityService service;
-    private final EmployeeService employeeService;
+    private final AvailabilityService availabilityService;
+    private final EmployeeRepository employeeRepository;
 
-    public AvailabilityController(AvailabilityService service,
-                                  EmployeeService employeeService) {
-        this.service = service;
-        this.employeeService = employeeService;
+    public AvailabilityController(AvailabilityService availabilityService,
+                                  EmployeeRepository employeeRepository) {
+        this.availabilityService = availabilityService;
+        this.employeeRepository = employeeRepository;
     }
 
-    @PostMapping("/{employeeId}")
-    public EmployeeAvailability create(@PathVariable Long employeeId,
-                                       @RequestBody EmployeeAvailability availability) {
-
-        Employee employee = employeeService.getEmployee(employeeId);
-        availability.setEmployee(employee);
-        return service.create(availability);
+    public ResponseEntity<List<EmployeeAvailability>> byDate(String date) {
+        LocalDate d = LocalDate.parse(date);
+        return ResponseEntity.ok(availabilityService.getByDate(d));
     }
 
-    @GetMapping("/date/{date}")
-    public List<EmployeeAvailability> getByDate(@PathVariable LocalDate date) {
-        return service.getByDate(date);
+    public ResponseEntity<EmployeeAvailability> create(EmployeeAvailability availability) {
+        return ResponseEntity.ok(availabilityService.create(availability));
+    }
+
+    public ResponseEntity<EmployeeAvailability> update(Long id, EmployeeAvailability availability) {
+        return ResponseEntity.ok(availabilityService.update(id, availability));
+    }
+
+    public ResponseEntity<String> delete(Long id) {
+        availabilityService.delete(id);
+        return ResponseEntity.ok("Deleted");
     }
 }
