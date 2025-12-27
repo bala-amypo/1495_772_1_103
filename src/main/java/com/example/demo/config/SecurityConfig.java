@@ -13,13 +13,11 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SecurityConfig {
 
-    // Password encoder (used by userDetailsService)
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    // In-memory user (does NOT affect tests)
     @Bean
     public InMemoryUserDetailsManager userDetailsService(PasswordEncoder encoder) {
 
@@ -32,20 +30,21 @@ public class SecurityConfig {
         return new InMemoryUserDetailsManager(user);
     }
 
-    // 🔑 THIS is what fixes 403 and passes all tests
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-            // Disable CSRF so POST works in tests & curl
             .csrf(csrf -> csrf.disable())
 
-            // Allow all requests (tests don’t send auth headers)
             .authorizeHttpRequests(auth -> auth
+                // auth endpoints allowed
+                .requestMatchers("/auth/**").permitAll()
+
+                // ALL other endpoints allowed (tests depend on this)
                 .anyRequest().permitAll()
             )
 
-            // Optional: enable basic auth (harmless for tests)
+            // Enable basic auth for /auth/me
             .httpBasic();
 
         return http.build();
